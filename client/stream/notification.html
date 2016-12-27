@@ -1,0 +1,44 @@
+<template name="notification">
+
+  <div class="row notification-bottom">
+
+    <div class="col-md-3">
+      <span class='label {{styleOrigin}}'>{{formatOrigin}}</span>
+      <span class='label {{styleType}}'>{{formatType}}</span>
+    </div>
+
+    <div class="col-md-9">{{message}} <span class='notification-date'>{{livestamp timestamp}}</span></div>
+
+  </div>
+
+ <!--  <div class="row notification-bottom {{important}}">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-1 notification-image"><img class="img-responsive" src='{{image}}'></div>
+    <div class="col-sm-7">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class='notification-title'>{{title}}</div>
+          <div class='notification-message'>{{message}}</div>
+        </div>
+        <div class="col-sm-6 notification-date">
+          {{livestamp timestamp}}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2"></div>
+  </div> -->
+
+  <!-- <div class='row'>
+    <div class='col-md-3'></div>
+    <div class='col-md-3 notification-title'>{{title}}</div>
+    <div class='col-md-3 notification-date'>{{formatDate}}</div>
+    <div class='col-md-3'></div>
+  </div>
+
+  <div class='row notification-bottom'>
+    <div class='col-md-3'></div>
+    <div class='col-md-6'>{{message}}</div>
+    <div class='col-md-3'></div>
+  </div> -->
+
+</template>

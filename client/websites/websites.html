@@ -1,0 +1,25 @@
+<template name="websites">
+
+    <h1>Websites</h1>
+
+    <div class='row'>
+
+    <div class='col-md-2'>Name: </div>
+    <div class='col-md-2'><input class='form-control' type='text' id='name'></div>
+    <div class='col-md-2'>URL: </div>
+    <div class='col-md-2'><input class='form-control' type='text' id='url'></div>
+	  <div class='col-md-2'>
+	    <button id='add-website' class='btn btn-block btn-primary'>Add Website</button>
+	  </div>
+    </div>
+
+ <!--    <div class='row'>
+      <div class='col-md-3'>{{> loginButtons}}</div>
+      <div class='col-md-3'><button id='test' class='btn btn-primary'>Test</button></div>
+    </div> -->
+
+    {{#each websites}}
+      {{> websiteDetails}}
+    {{/each}}
+
+</template>

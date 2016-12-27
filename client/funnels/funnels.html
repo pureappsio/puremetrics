@@ -1,0 +1,39 @@
+<template name="funnels">
+
+    <h3>Funnels</h3>
+
+    <div class='row'>
+
+    <div class='col-md-1'>Website: </div>
+    <div class='col-md-3'>
+        <select class='form-control' id='website-id'>
+
+         {{#each websites}}
+
+            {{> websiteSelect}}
+
+         {{/each}}
+            
+        </select>
+    </div>
+    <div class='col-md-1'>Name: </div>
+    <div class='col-md-2'><input class='form-control' type='text' id='funnel-name'></div>
+	  <div class='col-md-2'>
+	    <button id='add-funnel' class='btn btn-block btn-primary'>Create Funnel</button>
+	  </div>
+    </div>
+
+    <div class='row row-title'>
+
+      <div class='col-md-3'>Name</div>
+      <div class='col-md-3'>Global Conversion</div>
+
+    </div>
+
+    {{#each funnels}}
+
+      {{> funnel}}
+
+    {{/each}}
+
+</template>

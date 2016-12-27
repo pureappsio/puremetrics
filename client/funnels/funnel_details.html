@@ -1,0 +1,87 @@
+<template name="funnelDetails">
+
+    <div class='row'>
+
+      <div class='col-md-8 row-title'>{{name}} for the {{website}} website ({{dateRange}})</div>
+      <div class='col-md-2'><span id='switch'><a href=''>Switch Edit Mode</a></span></div>
+<!--       <div class='col-md-2'><span id='graph'><a href=''>Text/Graph Mode</a></span></div>
+ -->      <div class='col-md-2'><span id='graph'><a href=''>Auto Refresh OFF</a></span></div>
+
+    </div>
+
+    <div class='voffset50'></div>
+
+    {{#if editMode}}
+    <div class='row'>
+
+    <div class='col-md-1'><input class='form-control' type='text' placeholder='Name ...' id='name'></div>
+    <div class='col-md-2'>
+	    <select class='form-control' id='type'>
+        <option value='ads'>Facebook ads impressions</option>
+	    	<option value='visits'>Page visits</option>
+	    	<option value='subscriptions'>List subscriptions</option>
+	    	<option value='clicks'>Email clicks</option>
+	    	<option value='sales'>Sales</option>
+	    </select>
+    </div>
+    <div class='col-md-2' id='option-container-1'></div>
+    <div class='col-md-2' id='option-container-2'></div>
+    <div class='col-md-2' id='option-container-3'></div>
+    <div class='col-md-2' id='option-container-4'></div>
+
+	  <div class='col-md-1'>
+	    <button id='add-step' class='btn btn-block btn-primary'>Add Step</button>
+	  </div>
+    </div>
+
+    {{/if}}
+
+    {{#if textMode}}
+
+    <div class='row row-title'>
+
+      <div class='col-md-1'></div>
+      <div class='col-md-1'>Step</div>
+      <div class='col-md-3'>Name</div>
+      <div class='col-md-2'>Value</div>
+      <div class='col-md-2'>Conversion</div>
+      <div class='col-md-2'>Cost</div>
+
+    </div>
+
+    {{#each steps}}
+
+     {{> step}}
+
+    {{/each}}
+
+    {{else}}
+
+    <div class='row'>
+
+    <div class='col-md-3'></div>
+	<div class='col-md-6'>
+
+		<div id="container" style="width:100%; height:400px;"></div>
+
+	</div>
+
+	</div>
+
+    {{/if}}
+
+    <div class='row'>
+
+    <div class='col-md-2'></div>
+   
+	  <div class='col-md-4'>
+	    <button id='refresh-funnel' class='btn btn-block btn-primary'>Refresh Funnel Data</button>
+	  </div>
+
+	  <div class='col-md-4'>
+	    <a href='/websites/{{websiteId}}' class='btn btn-block btn-warning'>Come Back</a>
+	  </div>
+
+    </div>
+
+</template>

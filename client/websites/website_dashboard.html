@@ -1,0 +1,54 @@
+<template name='websiteDashboard'>
+    <h3>{{name}} ({{dateRange}})</h3>
+    <div class='row'>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Visitors</div>
+            <div class='indicator-display'>{{displayNumber visitors.current}} <span class='{{variationColor visitors.variation}}'>{{variationSign visitors.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>New Subscribers</div>
+            <div class='indicator-display'>{{displayNumber subscribers.current}} <span class='{{variationColor subscribers.variation}}'>{{variationSign subscribers.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>New Subscribers (Ads)</div>
+            <div class='indicator-display'>{{displayNumber adsTotal.current}}% <span class='{{variationColor adsTotal.variation}}'>{{variationSign adsTotal.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Total Subscribers</div>
+            <div class='indicator-display'>{{displayNumber subscribers.total}}</div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Sales Pages Visits</div>
+            <div class='indicator-display'>{{displayNumber salesPageSessions.current}} <span class='{{variationColor salesPageSessions.variation}}'>{{variationSign salesPageSessions.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Sales</div>
+            <div class='indicator-display'>{{displayNumber sales.current}} <span class='{{variationColor sales.variation}}'>{{variationSign sales.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Earnings</div>
+            <div class='indicator-display'>${{displayNumber earnings.current}} <span class='{{variationColor earnings.variation}}'>{{variationSign earnings.variation}}%</span></div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Visitors->List</div>
+            <div class='indicator-display'>{{displayNumber visitorsToList.current}}% <span class='{{variationColor visitorsToList.variation}}'>{{variationSign visitorsToList.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Sales Pages->Checkout</div>
+            <div class='indicator-display'>{{displayNumber salesPageToCheckout.current}}% <span class='{{variationColor salesPageToCheckout.variation}}'>{{variationSign salesPageToCheckout.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Abandon Rate</div>
+            <div class='indicator-display'>{{displayNumber abandon.current}}% <span class='{{negVariationColor abandon.variation}}'>{{variationSign abandon.variation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Sales Pages to Sale</div>
+            <div class='indicator-display'>{{displayNumber salesPageToSale.current}}% <span class='{{variationColor salesPageToSale.variation}}'>{{variationSign salesPageToSale.variation}}%</span></div>
+        </div>
+    </div>
+    {{> products}} {{> funnels}}
+</template>

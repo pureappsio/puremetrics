@@ -1,0 +1,18 @@
+{
+  "googleLocal": {
+  	"clientId": "",
+  	"secret": "" 
+  },
+  "googleOnline": {
+  	"clientId": "",
+  	"secret": ""
+  },
+  "facebookLocal": {
+   	  "appId": "",
+   	  "secret": ""
+   },
+   "facebookOnline": {
+   	  "appId": "",
+      "secret": ""
+   }
+}

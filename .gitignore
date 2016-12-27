@@ -1,0 +1,5 @@
+node_modules/
+settings_prod.json
+.deploy_si/
+.meteor/
+.DS_Store

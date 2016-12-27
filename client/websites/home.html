@@ -1,0 +1,66 @@
+<template name="home">
+    <h1>Dashboard ({{dateRange}})</h1>
+    <div class='row'>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Visitors</div>
+            <div class='indicator-display'>{{displayNumber totalVisitors}} <span class='{{variationColor totalVisitorsVariation}}'>{{variationSign totalVisitorsVariation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>New Subscribers</div>
+            <div class='indicator-display'>{{displayNumber totalNewSubscribers}} <span class='{{variationColor totalNewSubscribersVariation}}'>{{variationSign totalNewSubscribersVariation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>New Subscribers (ads)</div>
+            <div class='indicator-display'>{{displayNumber percentAds}}%</div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Subscribers</div>
+            <div class='indicator-display'>{{displayNumber totalSubscribers}}</div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Earnings</div>
+            <div class='indicator-display'>${{totalEarnings}} <span class='{{variationColor totalEarningsVariation}}'>{{variationSign totalEarningsVariation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Costs</div>
+            <div class='indicator-display'>${{totalCosts}} <span class='{{variationColor totalCostsVariation}}'>{{variationSign totalCostsVariation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Profits</div>
+            <div class='indicator-display'>${{totalProfits}} <span class='{{variationColor totalCostsVariation}}'>{{variationSign totalCostsVariation}}%</span></div>
+        </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Margin</div>
+            <div class='indicator-display'>{{totalMargin}}%<span class='{{variationColor totalCostsVariation}}'>{{variationSign totalCostsVariation}}%</span></div>
+        </div>
+    </div>
+    <div class='row'>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Visitors->List</div>
+            <div class='indicator-display'>{{displayNumber totalVisitorsToList}}% <span class='{{variationColor totalVisitorsToListVariation}}'>{{variationSign totalVisitorsToListVariation}}%</span></div>
+        </div>
+        <!-- <div class='col-md-3 indicator-box'>
+      <div class='indicator-title'>Sales Pages->Checkout</div>
+      <div class='indicator-display'>{{displayNumber totalAbandon}}% <span class='{{variationColor totalAbandonVariation}}'>{{variationSign totalAbandonVariation}}%</span></div>
+    </div> -->
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Abandon Rate</div>
+            <div class='indicator-display'>{{displayNumber totalAbandon}}% <span class='{{negVariationColor totalAbandonVariation}}'>{{variationSign totalAbandonVariation}}%</span></div>
+        </div>
+        <!--  <div class='col-md-3 indicator-box'>
+      <div class='indicator-title'>Sales Pages->Sales</div>
+      <div class='indicator-display'>${{displayNumber totalAbandon}}% <span class='{{variationColor totalAbandonVariation}}'>{{variationSign totalAbandonVariation}}%</span></div>
+    </div> -->
+    </div>
+    <div class='row row-title'>
+        <div class='col-md-2'>Website</div>
+        <div class='col-md-2 col-center'>Visitors</div>
+        <div class='col-md-2 col-center'>New Subscribers</div>
+        <div class='col-md-2 col-center'>Earnings</div>
+        <div class='col-md-2 col-center'>Visitors->List</div>
+        <div class='col-md-2 col-center'>Pages->Sales</div>
+    </div>
+    {{#each websites}} {{> websiteData}} {{/each}}
+</template>

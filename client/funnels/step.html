@@ -1,0 +1,26 @@
+<template name="step">
+
+    <div class='row'>
+
+    <div class='col-md-1'>
+    	
+    	<div class="btn-group" role="group" aria-label="...">
+			<button type="button" class="plus btn btn-default">+</button>
+			<button type="button" class="minus btn btn-default">-</button>
+		</div>
+
+
+    </div>
+
+      <div class='col-md-1'>{{number}}</div>
+      <div class='col-md-3'>{{name}}</div>
+      <div class='col-md-2'>{{value.current}}</div>
+      <div class='col-md-2'>{{conversion}}</div>
+      <div class='col-md-2'>{{cost}}</div>
+      {{#if editMode}}
+      <div class='col-md-1'><button class='btn delete btn-danger'>X</button></div>
+      {{/if}}
+
+    </div>
+
+</template>

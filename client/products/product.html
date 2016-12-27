@@ -1,0 +1,15 @@
+<template name="product">
+
+<tr>
+
+  <td><a href='/products/edit/{{_id}}'>{{name}}</a></td>
+  <td>{{displayNumber salesPageSessions.current}} (<span class='{{variationColor salesPageSessions.variation}}'>{{variationSign salesPageSessions.variation}}%</span>)</td>
+  <td>{{displayNumber sales.current}} (<span class='{{variationColor sales.variation}}'>{{variationSign sales.variation}}%</span>)</td>
+  <td>${{displayNumber earnings.current}} (<span class='{{variationColor earnings.variation}}'>{{variationSign earnings.variation}}%</span>)</td>
+  <td>${{displayNumber earnings.total}}</td>
+  <td>{{displayNumber salesToCheckout.current}}% (<span class='{{variationColor salesToCheckout.variation}}'>{{variationSign salesToCheckout.variation}}%</span>)</td>
+  <td><button class='btn btn-danger delete-product'>X</button></td>
+
+</tr>
+
+</template>

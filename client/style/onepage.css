@@ -1,0 +1,67 @@
+/* CSS declarations go here */
+body {
+  font-size: 22px;
+}
+
+.voffset50 {
+	margin-top: 50px;
+}
+
+.row {
+  margin-top: 20px;
+}
+
+.row-title {
+  font-weight: bold;
+}
+
+.row-center {
+  text-align: center;
+}
+
+.col-center {
+	text-align: center;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.back-green {
+  background-color: #F2FFEA;
+}
+
+.indicator-box {
+	padding: 10px;
+	text-align: center;
+	border: 1px solid black;
+	border-left: none;
+}
+
+.indicator-box:first-child {
+	border-left: 1px solid black;
+}
+
+.indicator-title {
+	font-size: 24px;
+	margin-bottom: 16px;
+}
+
+.indicator-display {
+	font-size: 36px;
+	font-weight: bold;
+}
+
+.indicator-data {
+	font-size: 26px;
+}
+
+
+.indicator-variation {
+	font-size: 22px;
+	font-weight: bold;
+}

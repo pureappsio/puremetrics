@@ -1,0 +1,67 @@
+<template name="products">
+
+<h3>Products</h3>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Sales Page Visits</th>
+        <th>Sales</th>
+        <th>Earnings</th>
+        <th>Total Earnings</th>
+        <th>Sales->Checkout</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    {{#each products}}
+
+      {{> product}}
+
+    {{/each}}
+      
+    </tbody>
+  </table>
+
+<!-- <h3>Add Product</h3>
+
+	<div class='row'>
+
+	  <div class='col-md-1'>Product: </div>
+
+	  <div class='col-md-2' id='products-selector'>
+
+	    <select id='select-product-0' class="form-control">
+		  {{#each availableProducts}}
+		    {{> productOption}}
+		  {{/each}}
+	    </select>
+
+	  </div>
+
+    <div class='col-md-1'>
+
+	    <button id='more-product' class='btn btn-default'>+</button>
+
+	  </div>
+
+	  </div>
+
+	  <div class='row'>
+
+	  <div class='col-md-2'>Sales Page: </div>
+
+	  <div class='col-md-3'><input class='form-control' id='product-sales'></div>
+
+	  <div class='col-md-2'>Checkout Page: </div>
+
+	  <div class='col-md-3'><input class='form-control' id='product-checkout'></div>
+
+	  <div class='col-md-2'>
+	    <button id='add-product' class='btn btn-block btn-primary'>Add</button>
+	  </div>
+
+  </div> -->
+
+</template>
