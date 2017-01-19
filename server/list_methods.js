@@ -29,7 +29,8 @@ Meteor.methods({
 
         // Make request
         var baseUrl = "http://" + integration.url + "/api/sequences/stats?key=" + integration.key;
-        var answer = HTTP.get(baseUrl + "&origin=" + origin + "&sequence=" + sequenceId + "&from=" + startDate + "&to=" + toDate);
+        // var answer = HTTP.get(baseUrl + "&origin=" + origin + "&sequence=" + sequenceId + "&from=" + startDate + "&to=" + toDate);
+        var answer = HTTP.get(baseUrl + "&sequence=" + sequenceId + "&from=" + startDate + "&to=" + toDate);
         return answer.data;
 
     },

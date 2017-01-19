@@ -1,0 +1,21 @@
+<template name="dashboards">
+
+<h3>Dashboard</h3>
+
+    <div class='row'>
+        <div class='col-md-3'>
+            <input class='form-control' id='dashboard-name'>
+        </div>
+        <div class='col-md-3'>
+            <button id='create-dashboard' class='btn btn-primary'>Create New Dashboard</button>
+        </div>
+    </div>
+
+    {{#each dashboards}}
+
+    	{{> dashboardListing}}
+
+    {{/each}}
+
+
+</template>

@@ -1,51 +1,51 @@
 // Charts
-var Highcharts = require('highcharts');
-require('highcharts/modules/funnel')(Highcharts);
+// var Highcharts = require('highcharts');
+// require('highcharts/modules/funnel')(Highcharts);
 
 Template.funnelDetails.onRendered(function() {
 
-  // Format data
-  var series = [];
-  var steps = Steps.find({funnelId: this.data._id}).fetch();
-  for (i = 0; i < steps.length; i++) {
-    var dataPoint = [steps[i].name, steps[i].value.current];
-    series.push(dataPoint);
-  }
+  // // Format data
+  // var series = [];
+  // var steps = Steps.find({funnelId: this.data._id}).fetch();
+  // for (i = 0; i < steps.length; i++) {
+  //   var dataPoint = [steps[i].name, steps[i].value.current];
+  //   series.push(dataPoint);
+  // }
 
-  // Plot
-  var myChart = Highcharts.chart('container', {
-        chart: {
-            type: 'funnel',
-            marginRight: 100
-        },
-        title: {
-            text: 'Funnel',
-            x: -50
-        },
-        plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b> ({point.y:,.0f})',
-                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                    softConnector: true
-                },
-                neckWidth: '30%',
-                neckHeight: '25%'
+  // // Plot
+  // var myChart = Highcharts.chart('container', {
+  //       chart: {
+  //           type: 'funnel',
+  //           marginRight: 100
+  //       },
+  //       title: {
+  //           text: 'Funnel',
+  //           x: -50
+  //       },
+  //       plotOptions: {
+  //           series: {
+  //               dataLabels: {
+  //                   enabled: true,
+  //                   format: '<b>{point.name}</b> ({point.y:,.0f})',
+  //                   color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+  //                   softConnector: true
+  //               },
+  //               neckWidth: '30%',
+  //               neckHeight: '25%'
 
-                //-- Other available options
-                // height: pixels or percent
-                // width: pixels or percent
-            }
-        },
-        legend: {
-            enabled: false
-        },
-        series: [{
-            name: 'Unique users',
-            data: series
-        }]
-    });
+  //               //-- Other available options
+  //               // height: pixels or percent
+  //               // width: pixels or percent
+  //           }
+  //       },
+  //       legend: {
+  //           enabled: false
+  //       },
+  //       series: [{
+  //           name: 'Unique users',
+  //           data: series
+  //       }]
+  //   });
 
 });
 

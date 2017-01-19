@@ -20,6 +20,25 @@ Handlebars.registerHelper('variationBack', function (variation) {
 
 });
 
+Handlebars.registerHelper('darkTheme', function () {
+
+  if (Meteor.user().theme) {
+
+    if (Meteor.user().theme == 'light') {
+      return false;
+    }
+    else {
+      return true;
+    }
+
+  }
+  else {
+    return false;
+  }
+
+});
+
+
 Handlebars.registerHelper('displayNumber', function (number) {
 
   if (number < 1) {
@@ -53,7 +72,29 @@ Handlebars.registerHelper('editMode', function (title) {
 
 Handlebars.registerHelper('dateRange', function () {
 
-  var dateRange = Meteor.user().dateRange;
+  var dateRange = Metas.findOne({type: 'dateRange'}).value;
+
+  if (dateRange == 'today') {
+    return 'Today';
+  }
+  if (dateRange == 'yesterday') {
+    return 'Yesterday';
+  }
+  if (dateRange == '3-days') {
+    return 'Past 3 Days';
+  }
+  if (dateRange == '7-days') {
+    return 'Past 7 Days';
+  }
+  if (dateRange == '30-days') {
+    return 'Past 30 Days';
+  }
+
+});
+
+Handlebars.registerHelper('funnelDateRange', function () {
+
+  var dateRange = Metas.findOne({type: 'funnelDateRange'}).value;
 
   if (dateRange == 'today') {
     return 'Today';

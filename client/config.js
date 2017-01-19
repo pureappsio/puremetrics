@@ -1,5 +1,3 @@
-var scopes = 
-
 Accounts.ui.config({
   requestPermissions: {
 	  google: [
@@ -7,6 +5,10 @@ Accounts.ui.config({
 	  ],
 	  facebook: ['ads_read']
   },
-  requestOfflineToken: true,
-  forceApprovalPrompt: true
+  requestOfflineToken: {
+    google: true,
+  },
+  forceApprovalPrompt: {
+    google: true,
+  }
 });

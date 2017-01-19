@@ -1,4 +1,10 @@
 Template.home.helpers({
+
+    lastUpdated: function() {
+
+        return moment(Dashboards.find({}).fetch()[0].lastUpdated).format('MMMM Do YYYY, h:mm:ss a');
+
+    },
     websites: function() {
         return Websites.find({}, { sort: { "visitors.current": -1 } });
     },

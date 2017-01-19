@@ -281,7 +281,13 @@ getProductEarnings: function(product) {
     request = baseUrl + '?key=' + key;
     request += '&from=' + fromDate + '&to=' + toDate;
     res = HTTP.get(request);
-    return res.data.sales.length;
+
+    if (res.data.sales) {
+      return res.data.sales.length;
+    }
+    else {
+      return 0;
+    }
 
   },
   getWebsiteEarnings: function(website, fromDate, toDate) {

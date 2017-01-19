@@ -3,6 +3,14 @@ if(Meteor.isServer) {
 	  return Meteor.users.find({_id: this.userId}, {services: {google: 1}, dateRange: 1});
 	});
 
+	Meteor.publish("userDashboards", function () {
+	  return Dashboards.find({userId: this.userId});
+	});
+
+	Meteor.publish("userMetas", function () {
+	  return Metas.find({userId: this.userId});
+	});
+
 	Meteor.publish("userWebsites", function () {
 	  return Websites.find({userId: this.userId});
 	});

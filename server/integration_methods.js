@@ -1,5 +1,12 @@
 Meteor.methods({
 
+  editIntegration: function(data) {
+
+    console.log(data);
+
+    Integrations.update(data._id, {$set: {key: data.key, url: data.url}});
+
+  },
   addIntegration: function(data) {
 
     // Insert

@@ -3,6 +3,30 @@ Future = Npm.require('fibers/future');
 
 Meteor.methods({
 
+	createDashboard: function(dashboard) {
+
+		console.log(dashboard);
+
+		Dashboards.insert(dashboard);
+
+	},
+	checkTheme: function() {
+
+		if (Meteor.users.findOne({theme: {$exists: true}})) {
+			return Meteor.users.findOne({theme: {$exists: true}}).theme;
+		}
+		else {
+			return 'light';
+		}
+
+	},
+
+	setTheme: function(theme) {
+
+		console.log(theme);
+		Meteor.users.update(Meteor.user()._id, {$set: {theme: theme}});
+	},
+
 	calculateEarnings: function(user) {
 
 		// Get all sites
@@ -29,13 +53,13 @@ Meteor.methods({
 	calculateCosts: function(user) {
 
 		// Find token
-	    var token = user.services.facebook[0].accessToken;
+	    var token = user.services.facebook.accessToken;
 
 	    // Set token
 	    FacebookAPI.setAccessToken(token);
 
 	    // Set version
-	    FacebookAPI.setVersion("2.7");
+	    FacebookAPI.setVersion("2.8");
 
 	    // Get period
     	var period = Meteor.call('getPeriod', user);

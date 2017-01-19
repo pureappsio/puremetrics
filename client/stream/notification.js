@@ -5,6 +5,9 @@ Template.notification.helpers({
     if (this.type == 'sale') {
       return "SALE";
     }
+    if (this.type == 'failed') {
+      return "FAILED";
+    }
     if (this.type == 'subscription') {
       return "SUBSCRIPTION";
     }
@@ -13,6 +16,9 @@ Template.notification.helpers({
   styleType: function() {
     if (this.type == 'sale') {
       return "label-success";
+    }
+    if (this.type == 'failed') {
+      return "label-danger";
     }
     if (this.type == 'subscription') {
       return "label-default";

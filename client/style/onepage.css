@@ -3,6 +3,15 @@ body {
   font-size: 22px;
 }
 
+.right-align {
+	text-align: right;
+}
+
+.dark-layout {
+	background-color: #2B292E;
+	color: white;
+}
+
 .voffset50 {
 	margin-top: 50px;
 }

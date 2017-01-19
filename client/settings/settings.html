@@ -1,43 +1,69 @@
 <template name='settings'>
-
-<h3>Google Accounts</h3>
-
-<div class='row'>
-  <div class="col-md-3"><button id='link-google' class='btn btn-block btn-primary'>Link Your Google Account</button></div>
-</div>
-
-<h3>Facebook Accounts</h3>
-
-<div class='row'>
-
-<div class="col-md-3"><button id='link-facebook' class='btn btn-block btn-primary'>Link Your Facebook Account</button></div>
-<div class="col-md-3"><input class='form-control' id='ads-id'></div>
-<div class="col-md-3"><button id='set-ads-id' class='btn btn-block btn-primary'>Set Facebook Ads Id</button></div>
-<div class="col-md-3">{{adsId}}</div>
-<div class="col-md-3"><button id='facebook-test' class='btn btn-block btn-primary'>Facebook Test</button></div>
-
-</div>
-
-<h3>Refresh</h3>
-
-<div class='row'>
-<div class="col-md-3"><button id='refresh' class='btn btn-block btn-warning'>Refresh Dashboard</button></div>
-
-  <div class="col-md-3">
-    <select id='date-range' class='form-control'>
-      <option value='today'>Today</option>
-      <option value='yesterday'>Yesterday</option>
-      <option value='3-days'>Last 3 Days</option>
-      <option value='7-days'>Last 7 Days</option>
-      <option value='30-days'>Last 30 Days</option>
-    </select>
-  </div>
-  <div class="col-md-3">
-    <button id='set-date-range' class='btn btn-block btn-primary'>Set Date Range</button>
-  </div>
-</div>
-
-<!-- 
+    <h3>Google Accounts</h3>
+    <div class='row'>
+        <div class="col-md-3">
+            <button id='link-google' class='btn btn-block btn-primary'>Link Your Google Account</button>
+        </div>
+    </div>
+    <h3>Facebook Accounts</h3>
+    <div class='row'>
+        <div class="col-md-3">
+            <button id='link-facebook' class='btn btn-block btn-primary'>Link Your Facebook Account</button>
+        </div>
+        <div class="col-md-3">
+            <input class='form-control' id='ads-id'>
+        </div>
+        <div class="col-md-3">
+            <button id='set-ads-id' class='btn btn-block btn-primary'>Set Facebook Ads Id</button>
+        </div>
+        <div class="col-md-3">{{adsId}}</div>
+        <div class="col-md-3">
+            <button id='facebook-test' class='btn btn-block btn-primary'>Facebook Test</button>
+        </div>
+    </div>
+    <h3>Theme</h3>
+    <div class='row'>
+        <div class="col-md-3">
+            <select id='theme' class='form-control'>
+                <option value='light'>Light</option>
+                <option value='dark'>Dark</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button id='set-theme' class='btn btn-block btn-primary'>Set Theme</button>
+        </div>
+    </div>
+    <h3>Date Range</h3>
+    <div class='row'>
+   <!--      <div class="col-md-3">
+            <button id='refresh' class='btn btn-block btn-warning'>Refresh Dashboard</button>
+        </div> -->
+        <div class="col-md-3">
+            <select id='date-range' class='form-control'>
+                <option value='today'>Today</option>
+                <option value='yesterday'>Yesterday</option>
+                <option value='3-days'>Last 3 Days</option>
+                <option value='7-days'>Last 7 Days</option>
+                <option value='30-days'>Last 30 Days</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button id='set-date-range' class='btn btn-block btn-primary'>Set Date Range</button>
+        </div>
+        <div class="col-md-3">
+            <select id='funnels-date-range' class='form-control'>
+                <option value='today'>Today</option>
+                <option value='yesterday'>Yesterday</option>
+                <option value='3-days'>Last 3 Days</option>
+                <option value='7-days'>Last 7 Days</option>
+                <option value='30-days'>Last 30 Days</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button id='set-funnel-date-range' class='btn btn-block btn-primary'>Set Funnel Date Range</button>
+        </div>
+    </div>
+    <!-- 
 <div class='row'>
   <div class="col-md-3"><button id='users' class='btn btn-primary'>Users</button></div>
 </div>
@@ -45,65 +71,47 @@
 <div class='row'>
   <div class="col-md-3"><button id='reset' class='btn btn-primary'>Reset</button></div>
 </div> -->
-
-
-<h3>Integrations</h3>
-
-<div class='row'>
-
-  <div class='col-md-1'>Type: </div>
-
-  <div class='col-md-2'>
-    <select class='form-control' id='integration-type'>
-      <option value='puremail'>PureMail</option>
-      <option value='purecart'>PureCart</option>
-    </select>
-  </div>
-
-  <div class='col-md-1'>URL: </div>
-
-  <div class='col-md-3'><input class='form-control' id='integration-url'></div>
-
-  <div class='col-md-1'>Key: </div>
-
-  <div class='col-md-2'><input class='form-control' id='integration-key'></div>
-
- <!--  <div class='col-md-1'>Token: </div>
+    <h3>Integrations</h3>
+    <div class='row'>
+        <div class='col-md-1'>Type: </div>
+        <div class='col-md-2'>
+            <select class='form-control' id='integration-type'>
+                <option value='puremail'>PureMail</option>
+                <option value='purecart'>PureCart</option>
+            </select>
+        </div>
+        <div class='col-md-1'>URL: </div>
+        <div class='col-md-3'>
+            <input class='form-control' id='integration-url'>
+        </div>
+        <div class='col-md-1'>Key: </div>
+        <div class='col-md-2'>
+            <input class='form-control' id='integration-key'>
+        </div>
+        <!--  <div class='col-md-1'>Token: </div>
 
   <div class='col-md-2'><input class='form-control' id='edd-token'></div> -->
-
-  <div class='col-md-2'>
-    <button id='add-integration' class='btn btn-block btn-primary'>Link</button>
-  </div>
-
-</div>
-
-{{#each integrations}}
-  {{> integration}}
-{{/each}}
-
-<h3>API Key</h3>
-
-<div class='row'>
-
-  <div class='col-md-3'>
-    <button id='generate-key' class='btn btn-block btn-primary'>Generate API Key</button>
-  </div>
-
-  <div class='col-md-3'>
-    <span id='api-key'>{{key}}</span>
-  </div>
-
-</div>
-
-<!-- <h4>Refresh</h4>
+        <div class='col-md-2'>
+            <button id='add-integration' class='btn btn-block btn-primary'>Link</button>
+        </div>
+    </div>
+    {{#each integrations}} {{> integration}} {{/each}}
+    <h3>API Key</h3>
+    <div class='row'>
+        <div class='col-md-3'>
+            <button id='generate-key' class='btn btn-block btn-primary'>Generate API Key</button>
+        </div>
+        <div class='col-md-3'>
+            <span id='api-key'>{{key}}</span>
+        </div>
+    </div>
+    <!-- <h4>Refresh</h4>
  -->
-<!-- <div class='row'>
+    <!-- <div class='row'>
 
   <div class='col-md-2'>
     <button id='refresh-products' class='btn btn-block btn-primary'>Refresh</button>
   </div>
 
 </div> -->
-
 </template>

@@ -1,10 +1,17 @@
 <template name='integration'>
-
-  <div class='row'>
-  	<div class="col-md-2">{{type}}</div>
-    <div class="col-md-4">{{url}}</div>
-    <div class="col-md-4">{{key}}</div>
-    <div class="col-md-1"><button class='btn btn-danger delete'>Delete</button></div>
-  </div>
-
+    <div class='row'>
+        <div class="col-md-2">{{type}}</div>
+        <div class="col-md-4">
+            <input id='url-{{_id}}' class='form-control' value='{{url}}'>
+        </div>
+        <div class="col-md-2">
+            <input id='key-{{_id}}' class='form-control' value='{{key}}'>
+        </div>
+        <div class="col-md-1">
+            <button class='btn btn-warning edit'>Edit</button>
+        </div>
+        <div class="col-md-1">
+            <button class='btn btn-danger delete'>Delete</button>
+        </div>
+    </div>
 </template>

@@ -1,104 +1,129 @@
 Template.settings.events({
 
-  'click #generate-key': function () {
+    'click #generate-key': function() {
 
-    Meteor.call('generateApiKey');
+        Meteor.call('generateApiKey');
 
-  },
+    },
 
-  'click #link-google': function () {
+    'click #set-theme': function() {
 
-      console.log(Meteor.user());
+        Meteor.call('setTheme', $('#theme :selected').val());
 
-      Google.requestCredential({requestPermissions: Accounts.ui._options.requestPermissions["google"]}, function(token) {
+    },
 
-        var secret = Package.oauth.OAuth._retrieveCredentialSecret(token);
+    'click #link-google': function() {
 
-        Meteor.call("userAddGoogleOauthCredentials", token, secret, function (err, response) {
-          console.log('Token saved');
+        console.log(Meteor.user());
+
+        // Options
+        options = {
+            requestPermissions: ['https://www.googleapis.com/auth/analytics.readonly'],
+            requestOfflineToken: true,
+            forceApprovalPrompt: true
+        }
+
+        Google.requestCredential(options, function(token) {
+
+            var secret = Package.oauth.OAuth._retrieveCredentialSecret(token);
+
+            Meteor.call("userAddGoogleOauthCredentials", token, secret, function(err, response) {
+                console.log('Token saved');
+            });
         });
-      });
 
-  },
+    },
 
-  'click #link-facebook': function () {
+    'click #link-facebook': function() {
 
-      Facebook.requestCredential({requestPermissions: Accounts.ui._options.requestPermissions["facebook"]}, function(token) {
+        Facebook.requestCredential({ requestPermissions: Accounts.ui._options.requestPermissions["facebook"] }, function(token) {
 
-        var secret = Package.oauth.OAuth._retrieveCredentialSecret(token);
+            var secret = Package.oauth.OAuth._retrieveCredentialSecret(token);
 
-        Meteor.call("userAddFacebookOauthCredentials", token, secret, function (err, response) {
-          console.log('Facebook token saved');
+            Meteor.call("userAddFacebookOauthCredentials", token, secret, function(err, response) {
+                console.log('Facebook token saved');
+            });
         });
-      });
-  },
+    },
 
-   'click #facebook-test': function () {
+    'click #facebook-test': function() {
 
-      Meteor.call('facebookAdsTest');
+        Meteor.call('facebookAdsTest');
 
-  },
+    },
 
-  'click #refresh': function () {
+    'click #refresh': function() {
 
-     Meteor.call('refreshAll');
+        Meteor.call('refreshAll');
 
-  },
+    },
 
-  'click #set-ads-id': function() {
+    'click #set-ads-id': function() {
 
-    Meteor.call('setFacebookAdsId',  $('#ads-id').val());
+        Meteor.call('setFacebookAdsId', $('#ads-id').val());
 
-  },
-  'click #set-date-range': function () {
+    },
+    'click #set-date-range': function() {
 
-     Meteor.call('setDateRange', $('#date-range :selected').val());
+        Meteor.call('setDateRange', $('#date-range :selected').val());
 
-  },
+    },
 
-  'click #users': function () {
+    'click #set-funnel-date-range': function() {
 
-     Meteor.call('printUsers');
+        var meta = {
+            value: $('#funnels-date-range :selected').val(),
+            type: 'funnelDateRange',
+            userId: Meteor.user()._id
+        }
 
-  },
+        Meteor.call('insertMeta', meta);
 
-  'click #reset': function () {
+    },
 
-     Meteor.call('reset');
+    'click #users': function() {
 
-  },
+        Meteor.call('printUsers');
 
-  'click #add-integration': function () {
+    },
 
-    var accountData = {
-      type: $('#integration-type :selected').val(),
-      key: $('#integration-key').val(),
-      url: $('#integration-url').val(),
-      userId: Meteor.user()._id
-    };
-    Meteor.call('addIntegration', accountData);
+    'click #reset': function() {
 
-  },
-  'click #refresh-products': function () {
+        Meteor.call('reset');
 
-    Meteor.call('refreshAllProducts');
+    },
 
-  }
+    'click #add-integration': function() {
+
+        var accountData = {
+            type: $('#integration-type :selected').val(),
+            key: $('#integration-key').val(),
+            url: $('#integration-url').val(),
+            userId: Meteor.user()._id
+        };
+        Meteor.call('addIntegration', accountData);
+
+    },
+    'click #refresh-products': function() {
+
+        Meteor.call('refreshAllProducts');
+
+    }
 
 });
 
 
 Template.settings.helpers({
 
-   key: function() {
-    return Meteor.user().apiKey;
-  },
+    key: function() {
+        return Meteor.user().apiKey;
+    },
 
-  integrations: function() {
-    return Integrations.find({});
-  },
-  adsId: function() {
-    return Meteor.user().facebookAdsId;
-  }
+    integrations: function() {
+        return Integrations.find({});
+    },
+    adsId: function() {
+        return Meteor.user().facebookAdsId;
+    }
 
 });
