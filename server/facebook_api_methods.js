@@ -69,7 +69,7 @@ Meteor.methods({
 
         // Get Ads ID
         var facebookAdsId = Meteor.user().facebookAdsId;
-    
+
         // Get insights
         var myFuture = new Future();
         FacebookAPI.get('act_' + facebookAdsId + '/campaigns', function(err, res) {
@@ -86,29 +86,41 @@ Meteor.methods({
         });
 
         var campaignIds = myFuture.wait();
-        // console.log(campaignIds);
 
         var campaigns = [];
 
+        var batchRequest = [];
+
         for (i = 0; i < campaignIds.length; i++) {
 
-            var myFuture = new Future();
-
-            FacebookAPI.get(campaignIds[i].id, parameters, function(err, res) {
-                if (err) {
-                    console.log(err);
-                    myFuture.return({});
-                } else {
-                    // console.log(res);
-                    myFuture.return(res);
-                }
-
+            batchRequest.push({
+                method: "GET",
+                relative_url: campaignIds[i].id + '?fields=name'
             });
 
-            // Add
-            campaigns.push(myFuture.wait());
+        }
+
+        var myFuture = new Future();
+
+        FacebookAPI.batch(batchRequest, function(err, res) {
+            if (err) {
+                console.log(err);
+                myFuture.return([]);
+            } else {
+                // console.log(res);
+                myFuture.return(res);
+            }
+
+        });
+
+        var batchResult = myFuture.wait();
+
+        for (k = 0; k < batchResult.length; k++) {
+
+            campaigns.push(JSON.parse(batchResult[k].body));
 
         }
+
         return campaigns;
 
     },

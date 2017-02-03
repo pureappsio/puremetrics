@@ -31,6 +31,10 @@
             <div class='indicator-title'>Earnings</div>
             <div class='indicator-display'>${{displayNumber earnings.current}} <span class='{{variationColor earnings.variation}}'>{{variationSign earnings.variation}}%</span></div>
         </div>
+        <div class='col-md-3 indicator-box'>
+            <div class='indicator-title'>Amazon Conversion</div>
+            <div class='indicator-display'>{{displayNumber amazon.current}} %<span class='{{variationColor amazon.variation}}'>{{variationSign amazon.variation}}%</span></div>
+        </div>
     </div>
     <div class='row'>
         <div class='col-md-3 indicator-box'>
@@ -50,5 +54,5 @@
             <div class='indicator-display'>{{displayNumber salesPageToSale.current}}% <span class='{{variationColor salesPageToSale.variation}}'>{{variationSign salesPageToSale.variation}}%</span></div>
         </div>
     </div>
-    {{> products}} {{> funnels}}
+    {{> products}} <!-- {{> funnels}} -->
 </template>

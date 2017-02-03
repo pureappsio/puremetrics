@@ -1,5 +1,12 @@
 Template.settings.events({
 
+    'click #scrap-test': function() {
+
+        console.log('Scrap');
+
+        Meteor.call('scrapTest');
+
+    },
     'click #generate-key': function() {
 
         Meteor.call('generateApiKey');

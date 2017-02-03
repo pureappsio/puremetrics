@@ -1,16 +1,9 @@
 <template name="websiteFunnels">
-
-	<h3>{{name}}</h3>
-
-	<!-- <div class='row'>
+    {{#if areFunnels}}
+    <h3>{{name}}</h3> {{/if}}
+    <!-- <div class='row'>
         <div class='col-md-6'>Name</div>
         <div class='col-md-3'>Conversion</div>
     </div> -->
-
-	{{#each funnels}}
-
-		{{> funnel}}
-
-	{{/each}}
-
+    {{#each funnels}} {{> funnel}} {{/each}}
 </template>

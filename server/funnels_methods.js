@@ -267,7 +267,8 @@ Meteor.methods({
                     var answer = Meteor.call('getSales', step.parameters.integrationId, {
                         productId: productId,
                         from: Meteor.call('getStandardDate', period.current.from),
-                        to: Meteor.call('getStandardDate', period.current.to)
+                        to: Meteor.call('getStandardDate', period.current.to),
+                        origin: step.parameters.origin
                     });
 
                     totalSales = totalSales + answer;
@@ -293,7 +294,8 @@ Meteor.methods({
                     var answer = Meteor.call('getEarnings', step.parameters.integrationId, {
                         productId: productId,
                         from: Meteor.call('getStandardDate', period.current.from),
-                        to: Meteor.call('getStandardDate', period.current.to)
+                        to: Meteor.call('getStandardDate', period.current.to),
+                        origin: step.parameters.origin
                     });
 
                     totalRevenue = totalRevenue + answer;
@@ -331,6 +333,22 @@ Meteor.methods({
 
             // Update
             Funnels.update(funnelId, { $set: { conversion: value } });
+        }
+
+        // Update multiplier for sales funnels
+        var funnel = Funnels.findOne(funnelId);
+        if (funnel.revenue && funnel.cost) {
+
+            currentMultiplier = funnel.revenue.current / funnel.cost.current;
+
+            var multiplier = {
+                current: currentMultiplier.toFixed(2),
+                past: ""
+            }
+
+            // Update
+            Funnels.update(funnelId, { $set: { multiplier: multiplier } });
+
         }
 
     }

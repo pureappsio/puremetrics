@@ -35,9 +35,9 @@ Meteor.methods({
 
         // Set
         var meta = {
-        	value: dateRange,
-        	type: 'dateRange',
-        	userId: Meteor.user()._id
+            value: dateRange,
+            type: 'dateRange',
+            userId: Meteor.user()._id
         }
         Meteor.call('insertMeta', meta);
 
@@ -47,7 +47,7 @@ Meteor.methods({
     },
     getDateRange: function() {
 
-        return Metas.findOne({type: 'dateRange'});
+        return Metas.findOne({ type: 'dateRange' });
 
     },
     printUsers: function() {
@@ -115,12 +115,20 @@ Meteor.methods({
                 var visitors = Meteor.call('getLast30DaysVisitors', websites[w], users[u]);
                 Websites.update(websites[w]._id, { $set: { visitors: visitors } });
 
+                // Refresh website
+                website = Websites.findOne(websites[w]._id);
+
+                // Amazon conversion
+                console.log('Updating Amazon conversions for website: ' + website.name);
+                var amazon = Meteor.call('getAmazonConversions', website, users[u]);
+                Websites.update(websites[w]._id, { $set: { amazon: amazon } });
+
                 // Update subscribers
                 if (websites[w].list) {
 
                     console.log('Updating subscribers for website: ' + websites[w].name);
 
-                    // All subscribers	
+                    // All subscribers  
                     var subscribers = Meteor.call('getLast30DaysSubscribers', websites[w]);
                     Websites.update(websites[w]._id, { $set: { subscribers: subscribers } });
 

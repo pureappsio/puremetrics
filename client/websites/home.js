@@ -37,6 +37,8 @@ Template.home.helpers({
         return Meteor.user().margin.current.toFixed(0);
     },
     totalAbandon: function() {
+
+        // Get websites
         websites = Websites.find({}).fetch();
 
         var totalCheckout = 0;
@@ -165,43 +167,43 @@ Template.home.helpers({
 
         return (currentRatio - pastRatio) / pastRatio * 100;
 
-    },
-    totalAbandonVariation: function() {
-        websites = Websites.find({}).fetch();
-
-        var totalCheckout = 0;
-        var pastCheckout = 0;
-
-        var totalSales = 0;
-        var pastSales = 0;
-
-        for (i = 0; i < websites.length; i++) {
-            if (websites[i].checkout) {
-                totalSales += websites[i].sales.current;
-                pastSales += websites[i].sales.past;
-
-                totalCheckout += websites[i].checkout.current;
-                pastCheckout += websites[i].checkout.past;
-            }
-        }
-
-        if (totalCheckout == 0) {
-            totalAbandon = 0;
-        } else {
-            totalAbandon = (1 - totalSales / totalCheckout) * 100;
-        }
-
-        if (pastCheckout == 0) {
-            pastAbandon = 0;
-        } else {
-            pastAbandon = (1 - pastSales / pastCheckout) * 100;
-        }
-
-        if (pastAbandon == 0) {
-            return 0;
-        } else {
-            return (totalAbandon - pastAbandon) / pastAbandon * 100;
-        }
-
     }
+    // totalAbandonVariation: function() {
+    //     websites = Websites.find({}).fetch();
+
+    //     var totalCheckout = 0;
+    //     var pastCheckout = 0;
+
+    //     var totalSales = 0;
+    //     var pastSales = 0;
+
+    //     for (i = 0; i < websites.length; i++) {
+    //         if (websites[i].checkout) {
+    //             totalSales += websites[i].sales.current;
+    //             pastSales += websites[i].sales.past;
+
+    //             totalCheckout += websites[i].checkout.current;
+    //             pastCheckout += websites[i].checkout.past;
+    //         }
+    //     }
+
+    //     if (totalCheckout == 0) {
+    //         totalAbandon = 0;
+    //     } else {
+    //         totalAbandon = (1 - totalSales / totalCheckout) * 100;
+    //     }
+
+    //     if (pastCheckout == 0) {
+    //         pastAbandon = 0;
+    //     } else {
+    //         pastAbandon = (1 - pastSales / pastCheckout) * 100;
+    //     }
+
+    //     if (pastAbandon == 0) {
+    //         return 0;
+    //     } else {
+    //         return (totalAbandon - pastAbandon) / pastAbandon * 100;
+    //     }
+
+    // }
 });

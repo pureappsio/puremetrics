@@ -92,7 +92,7 @@ Meteor.methods({
 
 	    // Build value
 	    var value = {
-	    	current: data[0].spend,
+	    	current: parseInt(data[0].spend),
 	    	past: 0,
 	    	variation: 0
 	    }

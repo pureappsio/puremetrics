@@ -1,393 +1,354 @@
 Meteor.methods({
 
-  getProducts: function(integrationId) {
+    getProducts: function(integrationId) {
 
-    // Get integration
-    var integration = Integrations.findOne(integrationId);
+        // Get integration
+        var integration = Integrations.findOne(integrationId);
 
-    // Make request
-    var baseUrl = 'http://' + integration.url + '/api/products';
-    var key = integration.key;
+        // Make request
+        var baseUrl = 'http://' + integration.url + '/api/products';
+        var key = integration.key;
 
-    // Query
-    request = baseUrl + '?key=' + key;
-    res = HTTP.get(request);
-    return res.data.products;
+        // Query
+        request = baseUrl + '?key=' + key;
+        res = HTTP.get(request);
+        return res.data.products;
 
-  },
-  editProduct: function(product) {
+    },
+    editProduct: function(product) {
 
-    console.log(product);
+        console.log(product);
 
-    // Update
-    Products.update(product._id, {$set: product});
+        // Update
+        Products.update(product._id, { $set: product });
 
-  },
-  // getEddProducts: function(website) {
+    },
 
-  //   // Parameters
-  //   var baseUrl = 'http://www.' + website.url + '/edd-api/products/';
-  //   var token = website.eddToken;
-  //   var key = website.eddKey;
+    addProduct: function(productData) {
 
-  //   // Query
-  //   request = baseUrl + '?key=' + key + '&token=' + token + '&number=100';
-  //   res = HTTP.get(request);
+        // Add
+        Products.insert(productData);
 
-  //   products = res.data.products;
+    },
+    deleteProduct: function(productId) {
 
-  //   for (i = 0; i < products.length; i++) {
+        // Delete
+        Products.remove(productId);
 
-  //     var eddProduct = products[i].info;
+    },
+    refreshAllProducts: function(website, user) {
 
-  //     product = {
-  //       name: eddProduct.title,
-  //       eddId: eddProduct.id,
-  //       userId: website.userId,
-  //       websiteId: website._id,
-  //       price: products[i].pricing.amount
-  //     };
+        // Get all products
+        var products = Products.find({ websiteId: website._id }).fetch();
 
-  //     if (!Products.findOne({eddId: eddProduct.id, websiteId: website._id})) {
-  //       Products.insert(product);
-  //     }
-  //     else {
-  //       Products.update({eddId: eddProduct.id, websiteId: website._id}, {$set: product});
-  //     }
-  //   }
+        // Refresh
+        for (p = 0; p < products.length; p++) {
+            Meteor.call('refreshProduct', products[p], user);
+        }
 
-  // },
-  addProduct: function(productData) {
+    },
+    refreshProduct: function(product, user) {
 
-  	// Add
-  	Products.insert(productData);
+        // Find sales & earnings for product
+        var sales = Meteor.call('getProductSales', product);
+        var earnings = Meteor.call('getProductEarnings', product);
 
-  },
-  deleteProduct: function(productId) {
+        // Update
+        Products.update(product._id, { $set: { earnings: earnings, sales: sales } });
 
-    // Delete
-	  Products.remove(productId);
+        console.log(product);
 
-  },
-refreshAllProducts: function(website, user) {
+        // Refresh sales page session
+        if (product.salesPage) {
+            var salesPageSessions = Meteor.call('getProductSalesPageVisits', product, user);
+            Products.update(product._id, { $set: { salesPageSessions: salesPageSessions } });
+        }
 
-  // Get all products
-  var products = Products.find({websiteId: website._id}).fetch();
+        // Refresh checkout page sessions
+        if (product.salesPage) {
+            var checkoutSessions = Meteor.call('getProductCheckoutVisits', product, user);
+            Products.update(product._id, { $set: { checkoutSessions: checkoutSessions } });
+        }
 
-  // Refresh
-  for (p = 0; p < products.length; p++) {
-    Meteor.call('refreshProduct', products[p], user);
-  }
+        // Refresh product
+        var product = Products.findOne(product._id);
 
-},
-// getAllSales: function(website) {
+        // Sales to checkout conversions
+        if (product.checkoutSessions) {
+            var salesToCheckout = Meteor.call('getProductSalesToCheckout', product);
+            Products.update(product._id, { $set: { salesToCheckout: salesToCheckout } });
+        }
 
-//   // Parameters
-//   var baseUrl = 'http://www.' + website.url + '/edd-api/sales/';
-//   var token = website.eddToken;
-//   var key = website.eddKey;
+    },
+    getProductEarnings: function(product) {
 
-//   // Query
-//   request = baseUrl + '?key=' + key + '&token=' + token + '&number=100';
-//   res = HTTP.get(request);
-//   return res.data.sales;
+        // Sales
+        var current = 0;
+        var past = 0;
+        var total = 0;
 
-// },
-refreshProduct: function(product, user) {
+        // Get period
+        var user = Meteor.users.findOne(product.userId);
+        var period = Meteor.call('getPeriod', user);
 
-    // Find sales & earnings for product
-    var sales = Meteor.call('getProductSales', product);
-    var earnings = Meteor.call('getProductEarnings', product);
-  
-    // Update
-    Products.update(product._id, {$set: {earnings: earnings, sales: sales}});
+        // Get earnings
+        var total = Meteor.call('getEarnings',
+            product.integrationId, {
+                productId: product.integrationProductId
+            }
+        );
+        var currentEarnings = Meteor.call('getEarnings',
+            product.integrationId, {
+                from: Meteor.call('getStandardDate', period.current.from),
+                to: Meteor.call('getStandardDate', period.current.to),
+                productId: product.integrationProductId
+            }
+        );
+        var pastEarnings = Meteor.call('getEarnings',
+            product.integrationId, {
+                from: Meteor.call('getStandardDate', period.past.from),
+                to: Meteor.call('getStandardDate', period.past.to),
+                productId: product.integrationProductId
+            }
+        );
 
-    console.log(product);
+        // Variation
+        variation = Meteor.call('calculateVariation', currentEarnings, pastEarnings);
 
-    // Refresh sales page session
-    if (product.salesPage) {
-      var salesPageSessions = Meteor.call('getProductSalesPageVisits', product, user);
-      Products.update(product._id, {$set: {salesPageSessions: salesPageSessions}});
+        return {
+            current: currentEarnings,
+            past: pastEarnings,
+            variation: variation,
+            total: total
+        }
+
+    },
+    getProductSales: function(product, sales) {
+
+        // Sales
+        var current = 0;
+        var past = 0;
+        var total = 0;
+
+        // Get period
+        var user = Meteor.users.findOne(product.userId);
+        var period = Meteor.call('getPeriod', user);
+
+        // Get earnings
+        var total = Meteor.call('getSales',
+            product.integrationId, {
+                productId: product.integrationProductId
+            }
+        );
+        var current = Meteor.call('getSales',
+            product.integrationId, {
+                from: Meteor.call('getStandardDate', period.current.from),
+                to: Meteor.call('getStandardDate', period.current.to),
+                productId: product.integrationProductId
+            }
+        );
+        var past = Meteor.call('getSales',
+            product.integrationId, {
+                from: Meteor.call('getStandardDate', period.past.from),
+                to: Meteor.call('getStandardDate', period.past.to),
+                productId: product.integrationProductId
+            }
+        );
+
+        // Variation
+        variation = Meteor.call('calculateVariation', current, past);
+
+        return {
+            current: current,
+            past: past,
+            variation: variation,
+            total: total
+        }
+
+    },
+    getLast30DaysSales: function(website) {
+
+        // Get period
+        var user = Meteor.users.findOne(website.userId);
+        var period = Meteor.call('getPeriod', user);
+
+        var currentSales = Meteor.call('getWebsiteSales',
+            website,
+            Meteor.call('getStandardDate', period.current.from),
+            Meteor.call('getStandardDate', period.current.to)
+        );
+
+        var pastSales = Meteor.call('getWebsiteSales',
+            website,
+            Meteor.call('getStandardDate', period.past.from),
+            Meteor.call('getStandardDate', period.past.to)
+        );
+
+        return {
+            current: currentSales,
+            past: pastSales,
+            variation: Meteor.call('calculateVariation', currentSales, pastSales)
+        };
+
+    },
+    getLast30DaysEarnings: function(website) {
+
+        // Get period
+        var user = Meteor.users.findOne(website.userId);
+        var period = Meteor.call('getPeriod', user);
+
+        var currentEarnings = Meteor.call('getWebsiteEarnings',
+            website,
+            Meteor.call('getStandardDate', period.current.from),
+            Meteor.call('getStandardDate', period.current.to)
+        );
+        var pastEarnings = Meteor.call('getWebsiteEarnings',
+            website,
+            Meteor.call('getStandardDate', period.past.from),
+            Meteor.call('getStandardDate', period.past.to)
+        );
+
+        return {
+            current: currentEarnings,
+            past: pastEarnings,
+            variation: Meteor.call('calculateVariation', currentEarnings, pastEarnings)
+        };
+
+    },
+
+    getWebsiteSales: function(website, fromDate, toDate) {
+
+        // Get integration
+        var integration = Integrations.findOne(website.salesIntegrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/sales';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        request += '&from=' + fromDate + '&to=' + toDate;
+        res = HTTP.get(request);
+
+        if (res.data.sales) {
+            return res.data.sales.length;
+        } else {
+            return 0;
+        }
+
+    },
+    getWebsiteEarnings: function(website, fromDate, toDate) {
+
+        // Get integration
+        var integration = Integrations.findOne(website.salesIntegrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/earnings';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        request += '&from=' + fromDate + '&to=' + toDate;
+        // console.log(request);
+        res = HTTP.get(request);
+        return res.data.earnings;
+
+    },
+    getEarnings: function(integrationId, parameters) {
+
+        // Get integration
+        var integration = Integrations.findOne(integrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/earnings';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+
+        if (parameters.from && parameters.to) {
+            request += '&from=' + parameters.from + '&to=' + parameters.to;
+        }
+        if (parameters.productId) {
+            request += '&product=' + parameters.productId;
+        }
+        if (parameters.origin) {
+            if (parameters.origin != 'all') {
+                request += '&origin=' + parameters.origin;
+            }
+        }
+
+        res = HTTP.get(request);
+        return res.data.earnings;
+
+    },
+    getSales: function(integrationId, parameters) {
+
+        // Get integration
+        var integration = Integrations.findOne(integrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/sales';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        if (parameters.from && parameters.to) {
+            request += '&from=' + parameters.from + '&to=' + parameters.to;
+        }
+        if (parameters.productId) {
+            request += '&product=' + parameters.productId;
+        }
+        if (parameters.origin) {
+            if (parameters.origin != 'all') {
+                request += '&origin=' + parameters.origin;
+            }
+        }
+        console.log(request);
+
+        res = HTTP.get(request);
+        return res.data.sales.length;
+
+    },
+    getCheckoutVisits: function(website, fromDate, toDate) {
+
+        // Get integration
+        var integration = Integrations.findOne(website.salesIntegrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/sessions';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        request += '&from=' + fromDate + '&to=' + toDate;
+        res = HTTP.get(request);
+        return res.data.sessions;
+
+    },
+    getCheckoutSessions: function(integrationId, parameters) {
+
+        // Get integration
+        var integration = Integrations.findOne(integrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/sessions';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+
+        if (parameters.to && parameters.from) {
+            request += '&from=' + parameters.from + '&to=' + parameters.to;
+        }
+
+        if (parameters.productId) {
+            request += '&product=' + parameters.productId;
+        }
+
+        res = HTTP.get(request);
+        return res.data.sessions;
+
     }
-
-    // Refresh checkout page sessions
-    if (product.salesPage) {
-      var checkoutSessions = Meteor.call('getProductCheckoutVisits', product, user);
-      Products.update(product._id, {$set: {checkoutSessions: checkoutSessions}});
-    }
-
-    // Refresh product
-    var product = Products.findOne(product._id);
-
-    // Sales to checkout conversions
-    if (product.checkoutSessions) {
-      var salesToCheckout = Meteor.call('getProductSalesToCheckout', product);
-      Products.update(product._id, {$set: {salesToCheckout: salesToCheckout}});
-    }
-
-},
-getProductEarnings: function(product) {
-
-    // Sales
-    var current = 0;
-    var past = 0;
-    var total = 0;
-
-    // Get period
-    var user = Meteor.users.findOne(product.userId);
-    var period = Meteor.call('getPeriod', user);
-
-    // Get earnings
-    var total = Meteor.call('getEarnings', 
-      product.integrationId, 
-      {
-        productId: product.integrationProductId
-      }
-    );
-    var currentEarnings = Meteor.call('getEarnings', 
-      product.integrationId, 
-      {
-        from: Meteor.call('getStandardDate', period.current.from), 
-        to: Meteor.call('getStandardDate', period.current.to),
-        productId: product.integrationProductId
-      }
-    );
-    var pastEarnings = Meteor.call('getEarnings', 
-      product.integrationId, 
-      {
-        from: Meteor.call('getStandardDate', period.past.from), 
-        to: Meteor.call('getStandardDate', period.past.to),
-        productId: product.integrationProductId
-      }
-    );
-
-    // Variation
-    variation = Meteor.call('calculateVariation', currentEarnings, pastEarnings);
-
-    return {
-      current: currentEarnings,
-      past: pastEarnings,
-      variation: variation,
-      total: total
-    }
-
-  },
-  getProductSales: function(product, sales) {
-
-    // Sales
-    var current = 0;
-    var past = 0;
-    var total = 0;
-
-    // Get period
-    var user = Meteor.users.findOne(product.userId);
-    var period = Meteor.call('getPeriod', user);
-
-    // Get earnings
-    var total = Meteor.call('getSales', 
-      product.integrationId, 
-      {
-        productId: product.integrationProductId
-      }
-    );
-    var current = Meteor.call('getSales', 
-      product.integrationId, 
-      {
-        from: Meteor.call('getStandardDate', period.current.from), 
-        to: Meteor.call('getStandardDate', period.current.to),
-        productId: product.integrationProductId
-      }
-    );
-    var past = Meteor.call('getSales', 
-      product.integrationId,
-      {
-        from: Meteor.call('getStandardDate', period.past.from), 
-        to: Meteor.call('getStandardDate', period.past.to),
-        productId: product.integrationProductId
-      }
-    );
-
-    // Variation
-    variation = Meteor.call('calculateVariation', current, past);
-
-    return {
-      current: current,
-      past: past,
-      variation: variation,
-      total: total
-    }
-
-  },
-  getLast30DaysSales: function(website) {
-
-    // Get period
-    var user = Meteor.users.findOne(website.userId);
-    var period = Meteor.call('getPeriod', user);
-
-    var currentSales = Meteor.call('getWebsiteSales', 
-      website, 
-      Meteor.call('getStandardDate', period.current.from), 
-      Meteor.call('getStandardDate', period.current.to) 
-    );
-
-    var pastSales = Meteor.call('getWebsiteSales', 
-      website, 
-      Meteor.call('getStandardDate', period.past.from), 
-      Meteor.call('getStandardDate', period.past.to) 
-    );
-
-    return {
-      current: currentSales,
-      past: pastSales,
-      variation: Meteor.call('calculateVariation', currentSales, pastSales)
-    };
-
-  },
-  getLast30DaysEarnings: function(website) {
-
-    // Get period
-    var user = Meteor.users.findOne(website.userId);
-    var period = Meteor.call('getPeriod', user);
-
-    var currentEarnings = Meteor.call('getWebsiteEarnings', 
-      website, 
-      Meteor.call('getStandardDate', period.current.from), 
-      Meteor.call('getStandardDate', period.current.to) 
-    );
-    var pastEarnings = Meteor.call('getWebsiteEarnings', 
-      website, 
-      Meteor.call('getStandardDate', period.past.from), 
-      Meteor.call('getStandardDate', period.past.to)
-    );
-
-    return {
-      current: currentEarnings,
-      past: pastEarnings,
-      variation: Meteor.call('calculateVariation', currentEarnings, pastEarnings)
-    };
-
-  },
-
-  getWebsiteSales: function(website, fromDate, toDate) {
-
-    // Get integration
-    var integration = Integrations.findOne(website.salesIntegrationId);
-
-    // Parameters
-    var baseUrl = 'http://' + integration.url + '/api/sales';
-    var key = integration.key;
-
-    // Query
-    request = baseUrl + '?key=' + key;
-    request += '&from=' + fromDate + '&to=' + toDate;
-    res = HTTP.get(request);
-
-    if (res.data.sales) {
-      return res.data.sales.length;
-    }
-    else {
-      return 0;
-    }
-
-  },
-  getWebsiteEarnings: function(website, fromDate, toDate) {
-
-    // Get integration
-    var integration = Integrations.findOne(website.salesIntegrationId);
-
-    // Parameters
-    var baseUrl = 'http://' + integration.url + '/api/earnings';
-    var key = integration.key;
-
-    // Query
-    request = baseUrl + '?key=' + key;
-    request += '&from=' + fromDate + '&to=' + toDate;
-    console.log(request);
-    res = HTTP.get(request);
-    return res.data.earnings;
-
-  },
-  getEarnings: function(integrationId, parameters) {
-
-    // Get integration
-    var integration = Integrations.findOne(integrationId);
-
-    // Parameters
-    var baseUrl = 'http://' + integration.url + '/api/earnings';
-    var key = integration.key;
-
-    // Query
-    request = baseUrl + '?key=' + key;
-    if (parameters.from && parameters.to) {
-      request += '&from=' + parameters.from + '&to=' + parameters.to;
-    }
-    if (parameters.productId) {
-      request += '&product=' + parameters.productId;
-    }
-    res = HTTP.get(request);
-    return res.data.earnings;
-
-  },
-  getSales: function(integrationId, parameters) {
-
-    // Get integration
-    var integration = Integrations.findOne(integrationId);
-
-    // Parameters
-    var baseUrl = 'http://' + integration.url + '/api/sales';
-    var key = integration.key;
-
-    // Query
-    request = baseUrl + '?key=' + key;
-    if (parameters.from && parameters.to) {
-      request += '&from=' + parameters.from + '&to=' + parameters.to;
-    }
-    if (parameters.productId) {
-      request += '&product=' + parameters.productId;
-    }
-    res = HTTP.get(request);
-    return res.data.sales.length;
-
-  },
-  getCheckoutVisits: function(website, fromDate, toDate) {
-
-    // Get integration
-    var integration = Integrations.findOne(website.salesIntegrationId);
-
-    // Parameters
-    var baseUrl = 'http://' + integration.url + '/api/sessions';
-    var key = integration.key;
-
-    // Query
-    request = baseUrl + '?key=' + key;
-    request += '&from=' + fromDate + '&to=' + toDate;
-    res = HTTP.get(request);
-    return res.data.sessions;
-
-  },
-  getCheckoutSessions: function(integrationId, parameters) {
-
-    // Get integration
-    var integration = Integrations.findOne(integrationId);
-
-    // Parameters
-    var baseUrl = 'http://' + integration.url + '/api/sessions';
-    var key = integration.key;
-
-    // Query
-    request = baseUrl + '?key=' + key;
-
-    if (parameters.to && parameters.from) {
-      request += '&from=' + parameters.from + '&to=' + parameters.to;
-    }
-    
-    if (parameters.productId) {
-      request += '&product=' + parameters.productId;
-    }
-
-    res = HTTP.get(request);
-    return res.data.sessions;
-
-  }
 
 });

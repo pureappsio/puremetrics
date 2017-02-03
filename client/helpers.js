@@ -41,6 +41,9 @@ Handlebars.registerHelper('darkTheme', function () {
 
 Handlebars.registerHelper('displayNumber', function (number) {
 
+   if (number < 0.1) {
+    return number.toFixed(2);
+  }
   if (number < 1) {
     return number.toFixed(1);
   }

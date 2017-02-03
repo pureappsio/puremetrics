@@ -178,7 +178,7 @@ Template.funnelDetails.events({
       Meteor.call('getProducts', integration, function(err, data) {
 
       // Create element
-      $('#option-container-2').append("<select id='products' multiple></select>");
+      $('#option-container-2').append("<select class='form-control' id='products' multiple></select>");
       $('#products').selectpicker();
 
       // Add products
@@ -193,7 +193,25 @@ Template.funnelDetails.events({
       $('#products').selectpicker('refresh');
 
     });
+
+      // Add origins
+      $('#option-container-3').append("<select class='form-control' id='origin'></select>");
       
+      $('#origin').append($('<option>', {
+        value: 'landing',
+        text: 'Landing Page'
+      }));
+
+      $('#origin').append($('<option>', {
+        value: 'organic',
+        text: 'Organic'
+      }));
+
+      $('#origin').append($('<option>', {
+        value: 'all',
+        text: 'All'
+      }));
+
     }
 
   },
@@ -293,6 +311,7 @@ Template.funnelDetails.events({
     if (selection == 'sales') {
       parameters.integrationId = $('#integration :selected').val();
       parameters.products = $('#products').val();
+      parameters.origin = $('#origin :selected').val();
     }
     step.parameters = parameters;
 

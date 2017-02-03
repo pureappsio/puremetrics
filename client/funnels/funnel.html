@@ -5,8 +5,11 @@
       <div class='col-md-4'><a href='/funnels/{{_id}}'>{{name}}</a></div>
       <div class='col-md-2'><span class="label label-{{typeLabel}}">{{formatType}}</span></div>
       <div class='col-md-1'>{{conversion.current}}%</div>
+      
+      <div class='col-md-1'>{{#if multiplier}}{{multiplier.current}}{{/if}}</div>
+
       <div class='col-md-1 red'>${{cost.current}}</div>
-      <div class='col-md-1 green'>${{revenue.current}}</div>
+      <div class='col-md-1 green'>{{#if revenue}}${{revenue.current}}{{/if}}</div>
       <div class='col-md-1'>
         <button class='btn btn-danger delete-funnel'>X</button>
       </div>
