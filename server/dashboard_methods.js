@@ -38,6 +38,12 @@ Meteor.methods({
 	      } 
 	    } 
 
+	    // Get global amazon earnings
+	    var dashboard = Dashboards.findOne({});
+	    if (dashboard.amazonEarnings) {
+	    	totalEarnings += dashboard.amazonEarnings;
+	    }
+
 	    // Build value
 	    var value = {
 	    	current: totalEarnings,

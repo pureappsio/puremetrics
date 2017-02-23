@@ -4,7 +4,7 @@ Template.settings.events({
 
         console.log('Scrap');
 
-        Meteor.call('scrapTest');
+        Meteor.call('fetchUSAmazonAffiliates', 'month');
 
     },
     'click #generate-key': function() {

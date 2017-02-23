@@ -4,32 +4,32 @@ Meteor.methods({
 
         if (dateRange == 'today') {
             var period = {
-                current: { from: 0, to: 0 },
+                current: { from: 0, to: 0, amazonDate: 'today' },
                 past: { from: 1, to: 1 }
             }
         } else if (dateRange == 'yesterday') {
             var period = {
-                current: { from: 1, to: 1 },
+                current: { from: 1, to: 1, amazonDate: 'yesterday' },
                 past: { from: 2, to: 2 }
             }
         } else if (dateRange == '7-days') {
             var period = {
-                current: { from: 8, to: 1 },
+                current: { from: 8, to: 1, amazonDate: '7days' },
                 past: { from: 15, to: 8 }
             }
         } else if (dateRange == '3-days') {
             var period = {
-                current: { from: 4, to: 1 },
+                current: { from: 4, to: 1, amazonDate: '3days' },
                 past: { from: 8, to: 4 }
             }
         } else if (dateRange == '30-days') {
             var period = {
-                current: { from: 31, to: 1 },
+                current: { from: 31, to: 1, amazonDate: '30days' },
                 past: { from: 61, to: 31 }
             }
         } else {
             var period = {
-                current: { from: 31, to: 1 },
+                current: { from: 31, to: 1, amazonDate: '30days' },
                 past: { from: 61, to: 31 }
             }
         }

@@ -159,6 +159,11 @@ Meteor.methods({
                     var earnings = Meteor.call('getLast30DaysEarnings', website);
                     Websites.update(website._id, { $set: { sales: sales, earnings: earnings } });
 
+                    // Sales by country
+                    var countriesSales = Meteor.call('getSalesCountry', website.salesIntegrationId, {});
+                    console.log(countriesSales);
+                    Websites.update(website._id, { $set: { countriesSales: countriesSales} });
+
                     // Products
                     Meteor.call('refreshAllProducts', website, users[u]);
 
@@ -184,6 +189,11 @@ Meteor.methods({
             }
 
             console.log('Done updating all websites');
+
+            // Amazon
+            // var amazonData = Meteor.call('getAmazonAffiliateData', users[u]);
+            // var dashboard = Dashboards.findOne({});
+            // Dashboards.update(dashboard._id, { $set: { amazonEarnings: amazonData.earnings } });
 
             // Calculate costs, profits and margins
             if (users[u].facebookAdsId) {

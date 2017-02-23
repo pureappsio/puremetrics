@@ -6,9 +6,12 @@
   "dependencies": {
     "babel-runtime": "*",
     "bcrypt": "*",
+    "cheerio": "^0.22.0",
     "fbgraph": "*",
     "highcharts": "*",
-    "highcharts-funnel": "*"
+    "highcharts-funnel": "*",
+    "nightmare": "^2.9.1",
+    "nightmare-meteor": "^2.4.21"
   },
   "devDependencies": {},
   "scripts": {

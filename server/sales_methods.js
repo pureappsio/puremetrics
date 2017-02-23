@@ -282,6 +282,62 @@ Meteor.methods({
         return res.data.earnings;
 
     },
+    getSalesCountry: function(integrationId, parameters) {
+
+        // Get earnings
+        var sales = Meteor.call('getSalesDetails', integrationId, parameters);
+
+        // Get conversions
+        res = HTTP.get('http://api.fixer.io/latest');
+        convRate = res.data;
+
+        // Classify by country
+        var countries = [];
+
+        for (s in sales) {
+
+            if (sales[s].country) {
+
+                // Get location
+                location = sales[s].country;
+
+                // Get amount in EUR
+                if (sales[s].currency == 'EUR') {
+                    var amount = parseFloat(sales[s].amount);
+                } else {
+                    var amount = parseFloat(sales[s].amount) / convRate.rates[sales[s].currency];
+                }
+
+                // Insert
+                inserted = false;
+                for (c in countries) {
+                    if (countries[c].location == location) {
+                        countries[c].amount += amount;
+                        inserted = true;
+                    }
+                }
+
+                if (inserted == false) {
+                    countries.push({
+                        location: location,
+                        amount: amount
+                    });
+                }
+
+                // if (countries[location]) {
+                //     countries[location] += amount;
+
+                // } else {
+                //     countries[location] = amount;
+
+                // }
+
+            }
+
+        }
+        return countries;
+
+    },
     getSales: function(integrationId, parameters) {
 
         // Get integration
@@ -308,6 +364,34 @@ Meteor.methods({
 
         res = HTTP.get(request);
         return res.data.sales.length;
+
+    },
+    getSalesDetails: function(integrationId, parameters) {
+
+        // Get integration
+        var integration = Integrations.findOne(integrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/sales';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        if (parameters.from && parameters.to) {
+            request += '&from=' + parameters.from + '&to=' + parameters.to;
+        }
+        if (parameters.productId) {
+            request += '&product=' + parameters.productId;
+        }
+        if (parameters.origin) {
+            if (parameters.origin != 'all') {
+                request += '&origin=' + parameters.origin;
+            }
+        }
+        console.log(request);
+
+        res = HTTP.get(request);
+        return res.data.sales;
 
     },
     getCheckoutVisits: function(website, fromDate, toDate) {

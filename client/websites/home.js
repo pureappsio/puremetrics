@@ -17,15 +17,10 @@ Template.home.helpers({
         return totalVisitors;
     },
     totalEarnings: function() {
-        websites = Websites.find({}).fetch();
-        var totalEarnings = 0;
-        for (i = 0; i < websites.length; i++) {
-            if (websites[i].earnings) {
-                totalEarnings += websites[i].earnings.current;
-            }
-
-        }
-        return totalEarnings.toFixed(0);
+        return Meteor.user().earnings.current.toFixed(0);
+    },
+    amazonEarnings: function() {
+        return Dashboards.findOne({}).amazonEarnings;
     },
     totalCosts: function() {
         return Meteor.user().costs.current.toFixed(0);

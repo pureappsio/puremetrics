@@ -8,8 +8,14 @@ Template.notification.helpers({
         if (this.type == 'failed') {
             return "FAILED";
         }
+        if (this.type == 'survey') {
+            return "SURVEY";
+        }
         if (this.type == 'subscription') {
             return "SUBSCRIPTION";
+        }
+        if (this.type == 'unsubscribed') {
+            return "UNSUBSCRIBED";
         }
 
     },
@@ -20,8 +26,14 @@ Template.notification.helpers({
         if (this.type == 'failed') {
             return "label-danger";
         }
+        if (this.type == 'survey') {
+            return "label-default";
+        }
         if (this.type == 'subscription') {
             return "label-default";
+        }
+        if (this.type == 'unsubscribed') {
+            return "label-danger";
         }
     },
     formatOrigin: function() {

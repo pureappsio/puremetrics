@@ -54,5 +54,12 @@
             <div class='indicator-display'>{{displayNumber salesPageToSale.current}}% <span class='{{variationColor salesPageToSale.variation}}'>{{variationSign salesPageToSale.variation}}%</span></div>
         </div>
     </div>
-    {{> products}} <!-- {{> funnels}} -->
+
+    <div class='row'>
+
+        <div class='col-md-12'>Top 5 selling countries: {{sellingCountry '0'}}, {{sellingCountry '1'}}, {{sellingCountry '2'}}, {{sellingCountry '3'}}, {{sellingCountry '4'}}</div>
+
+    </div>
+
+    {{> products}}
 </template>
