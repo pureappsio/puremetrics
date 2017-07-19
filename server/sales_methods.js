@@ -338,17 +338,53 @@ Meteor.methods({
         return countries;
 
     },
-    getSales: function(integrationId, parameters) {
+    getSessions: function(integrationId, parameters) {
 
         // Get integration
         var integration = Integrations.findOne(integrationId);
 
         // Parameters
-        var baseUrl = 'http://' + integration.url + '/api/sales';
+        var baseUrl = 'http://' + integration.url + '/api/sessions';
         var key = integration.key;
 
         // Query
         request = baseUrl + '?key=' + key;
+        if (parameters.from && parameters.to) {
+            request += '&from=' + parameters.from + '&to=' + parameters.to;
+        }
+        if (parameters.productId) {
+            request += '&product=' + parameters.productId;
+        }
+        if (parameters.type) {
+            request += '&type=' + parameters.type;
+        }
+        // if (parameters.origin) {
+        //     if (parameters.origin != 'all') {
+        //         request += '&origin=' + parameters.origin;
+        //     }
+        // }
+        console.log(request);
+
+        res = HTTP.get(request);
+        return res.data.sessions;
+
+    },
+    getSales: function(integrationId, parameters) {
+
+        console.log(integrationId);
+        console.log(parameters)
+
+        // Get integration
+        var integration = Integrations.findOne(integrationId);
+
+        // Parameters
+        var baseUrl = 'https://' + integration.url + '/api/sales';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        baseUrl += '&summary=true';
+
         if (parameters.from && parameters.to) {
             request += '&from=' + parameters.from + '&to=' + parameters.to;
         }

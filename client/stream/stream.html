@@ -1,11 +1,7 @@
 <template name="stream">
+    <h3>Live Stream</h3> 
 
-  <h3>Live Stream</h3>
+      <div>{{#transition in="fadeIn" delay="200"}} {{#each notifications}} {{> notification}} {{/each}} {{/transition}}</div>
 
-	{{#each notifications}}
-		{{> notification}}
-	{{/each}}
-	
+
 </template>
-
-      

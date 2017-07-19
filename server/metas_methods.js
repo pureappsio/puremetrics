@@ -19,6 +19,23 @@ Meteor.methods({
 
         }
 
+    },
+    getMeta: function(meta, integrationId) {
+
+        // Get integration
+        var integration = Integrations.findOne(integrationId);
+
+        // Parameters
+        var baseUrl = 'http://' + integration.url + '/api/metas/' + meta;
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        console.log(request);
+
+        res = HTTP.get(request);
+        return res.data.value;
+
     }
 
 });

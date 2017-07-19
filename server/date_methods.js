@@ -101,6 +101,42 @@ Meteor.methods({
 
         return date;
 
+    },
+    standardizedDate: function(date) {
+
+        current_month = date.getMonth() + 1;
+        current_year = date.getFullYear();
+        current_day = date.getDate();
+
+        current_month = current_month.toString();
+        current_day = current_day.toString();
+
+        if (current_month.length < 2) current_month = '0' + current_month;
+        if (current_day.length < 2) { current_day = '0' + current_day };
+
+        // Build date objects
+        date = current_month + '-' + current_day + '-' + current_year;
+
+        return date;
+
+    },
+    googleDate: function(date) {
+
+        current_month = date.getMonth() + 1;
+        current_year = date.getFullYear();
+        current_day = date.getDate();
+
+        current_month = current_month.toString();
+        current_day = current_day.toString();
+
+        if (current_month.length < 2) current_month = '0' + current_month;
+        if (current_day.length < 2) { current_day = '0' + current_day };
+
+        // Build date objects
+        date = current_year + '-' + current_month + '-' + current_day;
+
+        return date;
+
     }
 
 });

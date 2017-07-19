@@ -3,6 +3,54 @@ Future = Npm.require('fibers/future');
 
 Meteor.methods({
 
+    calculateAdsCosts: function(parameters) {
+
+        // Find token
+        var token = parameters.user.services.facebook.accessToken;
+
+        // Get Ads ID
+        var facebookAdsId = parameters.user.facebookAdsId;
+
+        // Set token
+        FacebookAPI.setAccessToken(token);
+
+        // Set version
+        FacebookAPI.setVersion("2.8");
+
+        console.log(parameters.from);
+        console.log(parameters.to);
+
+        // Date range
+        from = Meteor.call('googleDate', new Date(parameters.from));
+        to = Meteor.call('googleDate', new Date(parameters.to));
+
+        console.log(from);
+        console.log(to);
+
+        // Parameters
+        var parameters = {
+            time_range: {
+                "since": from,
+                "until": to
+            }
+        };
+
+        // Get insights
+        var myFuture = new Future();
+        FacebookAPI.get('act_' + facebookAdsId + '/insights', parameters, function(err, res) {
+            // returns the post id
+            console.log(res);
+            myFuture.return(res.data);
+
+        });
+
+        var data = myFuture.wait();
+
+        // Build value
+        return data[0].spend;
+
+    },
+
     setFacebookAdsId: function(adsId) {
 
         Meteor.users.update(Meteor.user()._id, { $set: { facebookAdsId: adsId } });
@@ -33,7 +81,8 @@ Meteor.methods({
             time_range: {
                 "since": from,
                 "until": to
-            }
+            },
+            fields: "impressions, clicks, account_id, campaign_id, spend"
         };
 
         // Get insights
@@ -151,25 +200,6 @@ Meteor.methods({
         });
 
         var campaignIds = myFuture.wait();
-        // console.log(campaignIds);
-
-        // var campaigns = [];
-
-        // for (i = 0; i < campaignIds.length; i++) {
-
-        //  var myFuture = new Future();
-
-        //  FacebookAPI.get(campaignIds[i].id, parameters, function(err, res) {
-        //       //console.log(res);
-        //       myFuture.return(res);
-
-        //  });
-
-        //  // Add
-        //  campaigns.push(myFuture.wait());
-
-        // }
-        // console.log(campaigns);
 
     }
 

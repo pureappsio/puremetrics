@@ -1,87 +1,68 @@
 <template name='websiteEdit'>
-
-  <h2>Editing {{name}}</h2>
-
-  <h3>General Settings</h3>
-
-  <div class='row'>
-
-  <div class='col-md-2'>Name: </div>
-    <div class='col-md-2'><input class='form-control' value="{{name}}" type='text' id='name'></div>
-    <div class='col-md-2'>URL: </div>
-    <div class='col-md-2'><input class='form-control' value="{{url}}" type='text' id='url'></div>
-
-   </div>
-
-  <h3>Email List</h3>
-
-  <div class='row'>
-
-    <div class='col-md-2'>Integration: </div>
-    <div class='col-md-3'>
-      <select class='form-control' id='list-integration'></select>
+    <h2>Editing {{name}}</h2>
+    <h3>General Settings</h3>
+    <div class='row'>
+        <div class='col-md-2'>Name: </div>
+        <div class='col-md-2'>
+            <input class='form-control' value="{{name}}" type='text' id='name'>
+        </div>
+        <div class='col-md-2'>URL: </div>
+        <div class='col-md-2'>
+            <input class='form-control' value="{{url}}" type='text' id='url'>
+        </div>
     </div>
-    <div class='col-md-3'>
-      <select class='form-control' id='list-parameter'></select>
+    <h3>PurePress</h3>
+    <div class='row'>
+        <div class='col-md-2'>Integration: </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='press-integration'>
+                <option value="none">None</option>
+                {{#each pressIntegrations}} {{> integrationSelect}} {{/each}}
+            </select>
+        </div>
     </div>
-  </div>
-
-<h3>Sales</h3>
-
-<div class='row'>
-
-  <div class='col-md-2'>Integration: </div>
-    <div class='col-md-3'>
-      <select class='form-control' id='list-integration-sales'></select>
+    <h3>Email List</h3>
+    <div class='row'>
+        <div class='col-md-2'>Integration: </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='list-integration'>
+                <option value="none">None</option>
+                {{#each mailIntegrations}} {{> integrationSelect}} {{/each}}
+            </select>
+        </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='list-parameter'></select>
+        </div>
     </div>
-
-</div>
-
-<!-- <div class='row'>
-
-  <div class='col-md-2'>Sales Pages: </div>
-  <div class='col-md-2'>
-    <input class='form-control' type='text' id='sales-page-1'>
-  </div>
-  <div class='col-md-2'>
-    <input class='form-control' type='text' id='sales-page-2'>
-  </div>
-  <div class='col-md-2'>
-    <input class='form-control' type='text' id='sales-page-3'>
-  </div>
-  <div class='col-md-2'>
-    <input class='form-control' type='text' id='sales-page-4'>
-  </div>
-
-</div> -->
-
-<div class='row'>
-
-    <div class='col-md-2'>
-      <button id='edit-website' class='btn btn-block btn-primary'>Edit Website</button>
+    <h3>Sales</h3>
+    <div class='row'>
+        <div class='col-md-2'>Integration: </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='list-integration-sales'>
+                <option value="none">None</option>
+                {{#each salesIntegrations}} {{> integrationSelect}} {{/each}}
+            </select>
+        </div>
     </div>
-</div>
-
-<h3>Products</h3>
-
-<div class='row'>
-
-  <div class='col-md-2'>Integration: </div>
-    <div class='col-md-3'>
-      <select class='form-control' id='product-integration'></select>
+    <div class='row'>
+        <div class='col-md-2'>
+            <button id='edit-website' class='btn btn-block btn-primary'>Edit Website</button>
+        </div>
     </div>
-  <div class='col-md-3'>
-    <select class='form-control' id='product-id'></select>
-  </div>
-
-  <div class='col-md-2'>
-      <input class='form-control' type='text' id='product-sales-page'>
-  </div>
-
-  <div class='col-md-2'>
-    <button id='add-product' class='btn btn-block btn-primary'>Add Product</button>
-  </div>
-
-</div>
-
+    <!-- <h3>Products</h3>
+    <div class='row'>
+        <div class='col-md-2'>Integration: </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='product-integration'></select>
+        </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='product-id'></select>
+        </div>
+        <div class='col-md-2'>
+            <input class='form-control' type='text' id='product-sales-page'>
+        </div>
+        <div class='col-md-2'>
+            <button id='add-product' class='btn btn-block btn-primary'>Add Product</button>
+        </div>
+    </div> -->
 </template>

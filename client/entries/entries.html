@@ -1,0 +1,52 @@
+<template name="entries">
+    <h3>Revenues</h3>
+    <div class='row'>
+        <div class='col-md-2'>
+            <input type="text" id='revenue-amount' class="form-control">
+        </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='revenue-category'>
+                {{#each categories}} {{> websiteSelect}} {{/each}}
+            </select>
+        </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='website'>
+                {{#each websites}} {{> websiteSelect}} {{/each}}
+            </select>
+        </div>
+        <div class='col-md-2'>
+            <input type="text" class="form-control" id="revenue-datepicker">
+        </div>
+        <div class='col-md-2'>
+            <button id='add-revenue' class='btn btn-block btn-primary'>Add Revenue</button>
+        </div>
+    </div>
+    {{#each revenues}} {{> entry}} {{/each}}
+    <h3>Expenses</h3>
+    <div class='row'>
+        <div class='col-md-2'>
+            <input type="text" id='expense-amount' class="form-control">
+        </div>
+        <div class='col-md-3'>
+            <select class='form-control' id='expense-category'>
+                {{#each categories}} {{> websiteSelect}} {{/each}}
+            </select>
+        </div>
+         <div class='col-md-2'>
+            <input type="text" class="form-control" id="expense-datepicker">
+        </div>
+        <div class='col-md-2'>
+            <button id='add-expense' class='btn btn-block btn-primary'>Add Expense</button>
+        </div>
+    </div>
+    {{#each expenses}} {{> entry}} {{/each}}
+    <h3>Categories</h3>
+    <div class='row'>
+        <div class='col-md-3'>
+            <input type="text" id='category-name' class="form-control">
+        </div>
+        <div class='col-md-2'>
+            <button id='add-category' class='btn btn-block btn-primary'>Add Category</button>
+        </div>
+    </div>
+</template>

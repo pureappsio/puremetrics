@@ -2,9 +2,7 @@ Template.settings.events({
 
     'click #scrap-test': function() {
 
-        console.log('Scrap');
-
-        Meteor.call('fetchUSAmazonAffiliates', 'month');
+        Meteor.call('calculateHistoricalEarnings', Meteor.user()._id);
 
     },
     'click #generate-key': function() {
@@ -43,7 +41,7 @@ Template.settings.events({
 
     'click #link-facebook': function() {
 
-        Facebook.requestCredential({ requestPermissions: Accounts.ui._options.requestPermissions["facebook"] }, function(token) {
+        Facebook.requestCredential({ requestPermissions: ['ads_read'] }, function(token) {
 
             var secret = Package.oauth.OAuth._retrieveCredentialSecret(token);
 
@@ -87,6 +85,19 @@ Template.settings.events({
         Meteor.call('insertMeta', meta);
 
     },
+
+    'click #add-goal': function() {
+
+        var meta = {
+            value: parseFloat($('#goal-amount').val()),
+            type: 'salesGoal',
+            userId: Meteor.user()._id
+        }
+
+        Meteor.call('insertMeta', meta);
+
+    },
+
 
     'click #users': function() {
 

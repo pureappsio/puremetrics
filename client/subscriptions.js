@@ -7,5 +7,7 @@ Tracker.autorun(function() {
     Meteor.subscribe('userIntegrations')
     Meteor.subscribe('userFunnels');
     Meteor.subscribe('userSteps');
+    Meteor.subscribe('userEntries');
     Meteor.subscribe('userNotifications');
+    Meteor.subscribe('userCategories');
 });

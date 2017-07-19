@@ -4,6 +4,44 @@ Future = Npm.require('fibers/future');
 
 Meteor.methods({
 
+    getAmazonEarnings: function(parameters) {
+
+        // Get integration
+        var integration = Integrations.findOne(parameters.siteId);
+
+        // Make request
+        var baseUrl = 'https://' + integration.url + '/api/sessions';
+        var key = integration.key;
+
+        // Query
+        request = baseUrl + '?key=' + key;
+        request += '&type=affiliateClick&earnings=true';
+
+        // From & to?
+        if (parameters.from && parameters.to) {
+            request += '&from=' + parameters.from + '&to=' + parameters.to;
+        }
+
+        console.log(request);
+
+        try {
+            res = HTTP.get(request);
+            var result = res.data.sessions;
+        } catch (error) {
+            var result = [];
+        }
+
+        var earnings = 0;
+
+        for (e in result) {
+            earnings += parseFloat(result[e].earnings);
+        }
+
+        console.log(earnings);
+
+        return earnings;
+
+    },
     fetchAmazonAffiliates: function(period) {
 
         var nightmare = Nightmare({ show: false, loadTimeout: 10000, waitTimeout: 20000 });

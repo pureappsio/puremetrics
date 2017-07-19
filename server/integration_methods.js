@@ -1,5 +1,84 @@
 Meteor.methods({
 
+    getWebsiteBoxes: function(websiteId) {
+
+        // Get integration
+        var website = Websites.findOne(websiteId);
+        var integration = Integrations.findOne(website.siteId);
+
+        // Make request
+        var baseUrl = "https://" + integration.url + "/api/boxes?key=" + integration.key;
+        var answer = HTTP.get(baseUrl);
+        return answer.data.boxes;
+
+    },
+    getWebsitePages: function(websiteId) {
+
+         // Get integration
+        var website = Websites.findOne(websiteId);
+        var integration = Integrations.findOne(website.siteId);
+
+        // Make request
+        var baseUrl = "https://" + integration.url + "/api/pages?key=" + integration.key;
+        var answer = HTTP.get(baseUrl);
+        return answer.data.pages;
+
+    },
+    getWebsiteSessions: function(parameters) {
+
+        // Get integration
+        var integration = Integrations.findOne(parameters.siteId);
+
+        // Make request
+        var baseUrl = "https://" + integration.url + "/api/sessions?key=" + integration.key;
+        baseUrl += '&summary=true&from=' + parameters.from + '&to=' + parameters.to;
+        if (parameters.boxId) {
+            baseUrl += '&box=' + parameters.boxId;
+        }
+
+        if (parameters.pageId) {
+            baseUrl += '&page=' + parameters.pageId;
+        }
+
+        if (parameters.postId) {
+            baseUrl += '&post=' + parameters.postId;
+        }
+
+        console.log(baseUrl);
+
+        var answer = HTTP.get(baseUrl);
+        return answer.data.sessions;
+
+    },
+    createUserAccount: function(data) {
+
+        console.log(data);
+
+        // Check if exist
+        if (Meteor.users.findOne({ "emails.0.address": data.email })) {
+
+            console.log('Updating existing user');
+            var userId = Meteor.users.findOne({ "emails.0.address": data.email })._id;
+
+        } else {
+
+            console.log('Creating new user');
+
+            // Create
+            var userId = Accounts.createUser({
+                email: data.email,
+                password: data.password
+            });
+
+            // Assign role & teacher ID
+            Meteor.users.update(userId, { $set: { role: data.role } });
+
+        }
+
+        return userId;
+
+    },
+
     editIntegration: function(data) {
 
         console.log(data);

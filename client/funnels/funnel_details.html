@@ -14,10 +14,14 @@
         </div>
         <div class='col-md-2'>
             <select class='form-control' id='type'>
-                <option value='ads'>Facebook ads impressions</option>
                 <option value='visits'>Page visits</option>
+                <option value='ads'>Facebook ads impressions</option>
+                <option value='fbclicks'>Facebook ads clicks</option>
+                <option value='messenger'>Messenger subscriptions</option>
                 <option value='subscriptions'>List subscriptions</option>
                 <option value='clicks'>Email clicks</option>
+                <option value='cart'>Added to cart</option>
+                <option value='checkout'>Initiated Checkout</option>
                 <option value='sales'>Sales</option>
             </select>
         </div>
@@ -35,8 +39,7 @@
         <div class='col-md-3'>Name</div>
         <div class='col-md-2'>Value</div>
         <div class='col-md-2'>Conversion</div>
-<!--         <div class='col-md-2'>Cost</div>
- -->        <div class='col-md-2'>Cost/Lead</div>
+        <div class='col-md-2'>Cost/Lead</div>
     </div>
     {{#each steps}} {{> step}} {{/each}} {{else}}
     <div class='row'>

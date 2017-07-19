@@ -132,53 +132,50 @@ Meteor.methods({
                 Funnels.update(funnelId, { $set: { cost: cost } });
 
             }
+            if (step.type == 'fbclicks') {
+
+                // Get data from Facebook
+                var insights = Meteor.call('getFacebookCampaignInsights',
+                    step.parameters.campaignId,
+                    Meteor.call('getGoogleDate', period.current.from),
+                    Meteor.call('getGoogleDate', period.current.to)
+                );
+
+                // Get impressions
+                if (insights[0]) {
+                    var clicks = insights[0].clicks;
+                } else {
+                    var clicks = 0;
+                }
+
+                // Build data
+                var value = {
+                    current: clicks,
+                    past: ""
+                }
+
+                // Update
+                Steps.update(step._id, { $set: { value: value } });
+
+            }
             if (step.type == 'visits') {
 
-                // Get options
-                options = {
-                    user: user
+                // Get all sessions for site
+                var parameters = {
+                    siteId: website.siteId,
+                    from: Meteor.call('getStandardDate', period.current.from),
+                    to: Meteor.call('getStandardDate', period.current.to)
                 }
 
-                // Get all visits for page
-                if (step.parameters.page == "") {
-
-                    // Get all sessions for site
-                    var sessions = Meteor.call('getGoogleSessions',
-                        website.propertyId,
-                        Meteor.call('getGoogleDate', period.current.from),
-                        Meteor.call('getGoogleDate', period.current.to),
-                        options
-                    );
-
-                } else {
-
-                    if (step.parameters.previousPage == "") {
-
-                        // Get all sessions for site
-                        var page = '/' + step.parameters.page + '/';
-                        var sessions = Meteor.call('getPageSessions',
-                            website.propertyId,
-                            page,
-                            Meteor.call('getGoogleDate', period.current.from),
-                            Meteor.call('getGoogleDate', period.current.to),
-                            options);
-
-                    } else {
-
-                        // Get all sessions for site
-                        var page = '/' + step.parameters.page + '/';
-                        var originPage = '/' + step.parameters.previousPage + '/';
-                        var sessions = Meteor.call('getPageSessionsPrevious',
-                            website.propertyId,
-                            page, originPage,
-                            Meteor.call('getGoogleDate', period.current.from),
-                            Meteor.call('getGoogleDate', period.current.to),
-                            options
-                        );
-
-                    }
-
+                if (step.parameters.boxId) {
+                    parameters.boxId = step.parameters.boxId;
                 }
+
+                if (step.parameters.pageId) {
+                    parameters.pageId = step.parameters.pageId;
+                }
+
+                var sessions = Meteor.call('getWebsiteSessions', parameters);
 
                 // Build data
                 var value = {
@@ -233,6 +230,27 @@ Meteor.methods({
                 }
             }
 
+            if (step.type == 'messenger') {
+
+                // Get all clicks to sequence in this period
+                var answer = Meteor.call('getMessengerSubscribers',
+                    step.parameters.integrationId,
+                    step.parameters.serviceId,
+                    Meteor.call('getStandardDate', period.current.from),
+                    Meteor.call('getStandardDate', period.current.to)
+                );
+
+                // Build data
+                var value = {
+                    current: answer.length,
+                    past: ""
+                }
+
+                // Update
+                Steps.update(step._id, { $set: { value: value } });
+
+            }
+
             if (step.type == 'clicks') {
 
                 // Get all clicks to sequence in this period
@@ -255,25 +273,89 @@ Meteor.methods({
 
             }
 
-            if (step.type == 'sales') {
+            if (step.type == 'cart') {
 
-                totalSales = 0;
+                totalCart = 0;
 
                 for (p = 0; p < step.parameters.products.length; p++) {
 
                     productId = step.parameters.products[p];
 
                     // Get all clicks to sequence in this period
-                    var answer = Meteor.call('getSales', step.parameters.integrationId, {
+                    var answer = Meteor.call('getSessions', step.parameters.integrationId, {
                         productId: productId,
                         from: Meteor.call('getStandardDate', period.current.from),
                         to: Meteor.call('getStandardDate', period.current.to),
-                        origin: step.parameters.origin
+                        origin: step.parameters.origin,
+                        type: 'cart'
                     });
 
-                    totalSales = totalSales + answer;
+                    totalCart = totalCart + answer;
 
                 }
+
+                // Build data
+                var value = {
+                    current: totalCart,
+                    past: ""
+                }
+
+                // Update
+                Steps.update(step._id, { $set: { value: value } });
+
+            }
+
+            if (step.type == 'checkout') {
+
+                totalCheckout = 0;
+
+                for (p = 0; p < step.parameters.products.length; p++) {
+
+                    productId = step.parameters.products[p];
+
+                    // Get all clicks to sequence in this period
+                    var answer = Meteor.call('getSessions', step.parameters.integrationId, {
+                        productId: productId,
+                        from: Meteor.call('getStandardDate', period.current.from),
+                        to: Meteor.call('getStandardDate', period.current.to),
+                        origin: step.parameters.origin,
+                        type: 'checkout'
+                    });
+
+                    totalCheckout = totalCheckout + answer;
+
+                }
+
+                // Build data
+                var value = {
+                    current: totalCheckout,
+                    past: ""
+                }
+
+                // Update
+                Steps.update(step._id, { $set: { value: value } });
+
+            }
+
+            if (step.type == 'sales') {
+
+                totalSales = 0;
+
+                // for (p = 0; p < step.parameters.products.length; p++) {
+
+                productId = step.parameters.products;
+
+                // Get all clicks to sequence in this period
+                var answer = Meteor.call('getSales', step.parameters.integrationId, {
+                    productId: productId,
+                    from: Meteor.call('getStandardDate', period.current.from),
+                    to: Meteor.call('getStandardDate', period.current.to),
+                    origin: step.parameters.origin
+                });
+
+                totalSales = totalSales + answer;
+
+                // }
 
                 // Build data
                 var value = {
@@ -286,21 +368,21 @@ Meteor.methods({
 
                 totalRevenue = 0;
 
-                for (p = 0; p < step.parameters.products.length; p++) {
+                // for (p = 0; p < step.parameters.products.length; p++) {
 
-                    productId = step.parameters.products[p];
+                productId = step.parameters.products;
 
-                    // Get all clicks to sequence in this period
-                    var answer = Meteor.call('getEarnings', step.parameters.integrationId, {
-                        productId: productId,
-                        from: Meteor.call('getStandardDate', period.current.from),
-                        to: Meteor.call('getStandardDate', period.current.to),
-                        origin: step.parameters.origin
-                    });
+                // Get all clicks to sequence in this period
+                var answer = Meteor.call('getEarnings', step.parameters.integrationId, {
+                    productId: productId,
+                    from: Meteor.call('getStandardDate', period.current.from),
+                    to: Meteor.call('getStandardDate', period.current.to),
+                    origin: step.parameters.origin
+                });
 
-                    totalRevenue = totalRevenue + answer;
+                totalRevenue = totalRevenue + answer;
 
-                }
+                // }
 
                 // Build data for revenue
                 var revenue = {

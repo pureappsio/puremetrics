@@ -21,19 +21,19 @@ Template.notification.helpers({
     },
     styleType: function() {
         if (this.type == 'sale') {
-            return "label-success";
+            return "badge-success";
         }
         if (this.type == 'failed') {
-            return "label-danger";
+            return "badge-danger";
         }
         if (this.type == 'survey') {
-            return "label-default";
+            return "badge-default";
         }
         if (this.type == 'subscription') {
-            return "label-default";
+            return "badge-default";
         }
         if (this.type == 'unsubscribed') {
-            return "label-danger";
+            return "badge-danger";
         }
     },
     formatOrigin: function() {
@@ -65,19 +65,25 @@ Template.notification.helpers({
     styleOrigin: function() {
         if (this.origin) {
             if (this.origin == 'landing' || this.origin == 'ads') {
-                return "label-primary";
+                return "badge-primary";
             } else if (this.origin == 'blog' || this.origin == 'organic') {
-                return "label-warning";
+                return "badge-warning";
             } else if (this.origin == 'social') {
-                return "label-info";
+                return "badge-info";
             } else if (this.origin == 'affiliate') {
-                return "label-danger";
+                return "badge-danger";
             } else if (this.origin == 'direct') {
-                return "label-warning";
+                return "badge-warning";
             }
         } else {
-            return "label-warning";
+            return "badge-warning";
         }
+    },
+    formatMessage: function() {
+
+        var message = (this.message).replace("Hypnotized Girls Videos", "eCommerce Store");
+        return message;
+
     },
     formatDate: function() {
         return moment(this.timestamp).fromNow();
